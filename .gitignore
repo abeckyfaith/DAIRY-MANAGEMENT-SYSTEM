@@ -1,0 +1,17 @@
+# Ignore these files
+.env
+*.log
+nul
+.DS_Store
+Thumbs.db
+
+# Ignore uploads folder
+/uploads/*
+
+# Ignore IDE files
+.vscode/
+.idea/
+
+# Ignore system files
+*.bak
+*.swp

@@ -1,0 +1,271 @@
+:root {
+    /* Blue Family Color Palette */
+    --primary: #007ce8;
+    --primary-dark: #0069c4;
+    --primary-light: #e6f2ff;
+    --secondary: #1d4a7a;
+    --accent: #0dcaf0;
+    
+    /* Role Colors */
+    --role-admin: #007ce8;
+    --role-manager: #1d4a7a;
+    --role-staff: #921cc0;
+    --role-worker: #198754;
+    
+    /* Neutral Colors */
+    --white: #ffffff;
+    --gray-50: #f8f9fa;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    
+    /* Layout */
+    --radius-sm: 4px;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1);
+}
+
+body {
+    background-color: var(--gray-50);
+    color: var(--gray-800);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+}
+
+/* Navbar Improvements */
+.navbar {
+    background-color: var(--gray-900) !important;
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: rgba(255,255,255,0.8) !important;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.nav-link:hover {
+    color: var(--white) !important;
+}
+
+.role-badge {
+    background-color: var(--white);
+    color: var(--gray-900);
+    padding: 6px 18px;
+    border-radius: var(--radius-xl);
+    font-weight: 800;
+    font-size: 0.8rem;
+    border: 2px solid var(--primary);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+}
+
+/* Login Page Styling (Matching Image 1) */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1e293b;
+    padding: 20px;
+}
+
+.login-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+}
+
+.login-header {
+    background: linear-gradient(180deg, #1d4a7a 0%, #007ce8 100%);
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--white);
+}
+
+.login-logo-box {
+    width: 64px;
+    height: 64px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.login-logo-box i {
+    font-size: 32px;
+    color: var(--white);
+}
+
+.login-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.login-header p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.login-body {
+    padding: 40px;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--gray-700);
+    margin-bottom: 8px;
+}
+
+.form-control {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    background-color: var(--white);
+    transition: all 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.btn-signin {
+    background-color: #3498db;
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+    transition: all 0.3s;
+}
+
+.btn-signin:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Dashboard Styling (Matching Image 2) */
+.welcome-banner {
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    color: var(--white);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-md);
+}
+
+.welcome-banner.staff { background-color: var(--role-staff); }
+.welcome-banner.manager { background-color: var(--role-manager); }
+.welcome-banner.admin { background-color: var(--role-admin); }
+.welcome-banner.worker { background-color: var(--role-worker); }
+
+.welcome-banner h2 {
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.banner-badge {
+    background: var(--white);
+    color: var(--gray-900);
+    padding: 5px 15px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-right: 10px;
+}
+
+/* Quick Action Cards */
+.quick-actions-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.quick-actions-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--gray-100);
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.quick-actions-body {
+    padding: 30px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.quick-action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--gray-700);
+    width: 130px;
+}
+
+.icon-box {
+    width: 80px;
+    height: 80px;
+    background-color: #e6f4ff;
+    border: 1px solid #bae7ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.icon-box i {
+    font-size: 32px;
+    color: #404040; /* Gray/Dark color for icons as per image 2 */
+}
+
+.quick-action-item:hover .icon-box {
+    background-color: #bae7ff;
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+}
+
+.quick-action-item span {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Fix for icons appearing as black boxes */
+.fas, .far, .fab, .fa-solid, .fa-regular {
+    display: inline-block !important;
+    visibility: visible !important;
+}

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flowchart - Dairy Management System</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 1cm;
+            background: white;
+        }
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .flow-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 15px 0;
+        }
+        .box {
+            padding: 12px 20px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 140px;
+            font-size: 11pt;
+            background: white;
+        }
+        .box-primary {
+            background: #e3f2fd;
+            border-color: #1976d2;
+        }
+        .box-process {
+            background: #fff3e0;
+            border-color: #f57c00;
+        }
+        .box-decision {
+            background: #fce4ec;
+            border-color: #c2185b;
+            transform: rotate(0deg);
+            border-radius: 20px;
+        }
+        .box-start {
+            background: #c8e6c9;
+            border-color: #388e3c;
+            border-radius: 25px;
+        }
+        .box-end {
+            background: #ffcdd2;
+            border-color: #d32f2f;
+            border-radius: 25px;
+        }
+        .box-subprocess {
+            background: #f3e5f5;
+            border-color: #7b1fa2;
+            border-style: dashed;
+        }
+        .arrow {
+            font-size: 20px;
+            color: #333;
+        }
+        .arrow-down {
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            margin: 5px 0;
+        }
+        .diamond {
+            width: 120px;
+            height: 60px;
+            background: #fce4ec;
+            border: 2px solid #c2185b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            margin: 10px;
+        }
+        .diamond-content {
+            transform: rotate(-45deg);
+            font-size: 10pt;
+        }
+        .connector {
+            width: 2px;
+            height: 30px;
+            background: #333;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 18pt;
+        }
+        .system-diagram {
+            border: 2px solid #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .module-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .module {
+            border: 2px solid #1976d2;
+            border-radius: 8px;
+            padding: 10px;
+            background: #e3f2fd;
+            text-align: center;
+            font-weight: bold;
+        }
+        .title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+<h1>DAIRY MANAGEMENT SYSTEM - FLOWCHART</h1>
+
+<div class="flowchart-container">
+    
+    <!-- Main Flow -->
+    <div class="flow-row">
+        <div class="box box-start">User Login</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Authentication</div>
+        <span class="arrow">→</span>
+        <div class="box box-decision">Valid?</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Load Dashboard</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="box box-process">Dashboard (Statistics & Overview)</div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-primary">Animals</div>
+        <div class="box box-primary">Milk Production</div>
+        <div class="box box-primary">Health</div>
+        <div class="box box-primary">Feed</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-primary">Breeding</div>
+        <div class="box box-primary">Finance</div>
+        <div class="box box-primary">Inventory</div>
+        <div class="box box-primary">Reports</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-primary">Categories</div>
+        <div class="box box-primary">Products</div>
+        <div class="box box-primary">Suppliers</div>
+        <div class="box box-primary">Sales</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-primary">Sales Report</div>
+        <div class="box box-primary">Staff (Admin)</div>
+        <div class="box box-primary">Profile</div>
+        <div class="box box-primary">Settings</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="box box-end">Logout</div>
+
+</div>
+
+<div class="page-break"></div>
+
+<h1 style="margin-top: 30px;">SYSTEM MODULES OVERVIEW</h1>
+
+<div class="system-diagram">
+    <div class="title">Core Modules</div>
+    <div class="module-container">
+        <div class="module">
+            <div>🦊 Animals</div>
+            <small>Registration, Tracking</small>
+        </div>
+        <div class="module">
+            <div>🍶 Milk</div>
+            <small>Recording, Analysis</small>
+        </div>
+        <div class="module">
+            <div>❤️ Health</div>
+            <small>Check-ups, Vaccines</small>
+        </div>
+        <div class="module">
+            <div>🌿 Feed</div>
+            <small>Inventory, Suppliers</small>
+        </div>
+        <div class="module">
+            <div>♀️ Breeding</div>
+            <small>Insemination, Pregnancy</small>
+        </div>
+        <div class="module">
+            <div>💰 Finance</div>
+            <small>Income, Expenses</small>
+        </div>
+        <div class="module">
+            <div>📦 Inventory</div>
+            <small>Equipment, Feed Stock</small>
+        </div>
+        <div class="module">
+            <div>📊 Reports</div>
+            <small>Analytics, Export</small>
+        </div>
+        <div class="module">
+            <div>👥 Staff</div>
+            <small>User Management</small>
+        </div>
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<h1>ANIMAL MANAGEMENT FLOW</h1>
+
+<div class="flowchart-container">
+    
+    <div class="flow-row">
+        <div class="box box-process">Add New Animal</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-subprocess">
+            Enter Details:<br>
+            - Tag Number<br>
+            - Breed<br>
+            - Birth Date<br>
+            - Gender
+        </div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Save to Database</div>
+        <span class="arrow">→</span>
+        <div class="box box-decision">Success?</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Update Animals List</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Log Activity</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="box box-process">Display Success Message</div>
+    
+</div>
+
+<div class="page-break"></div>
+
+<h1>MILK PRODUCTION RECORDING FLOW</h1>
+
+<div class="flowchart-container">
+    
+    <div class="flow-row">
+        <div class="box box-process">Record Milk Production</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-subprocess">
+            Select Animal<br>
+            ↓<br>
+            Enter Amount (Liters)<br>
+            ↓<br>
+            Enter Recording Date
+        </div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Save Record</div>
+        <span class="arrow">→</span>
+        <div class="box box-decision">Saved?</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Update Dashboard Stats</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Log Activity</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="box box-process">Display Milk Production Table</div>
+    
+</div>
+
+<div class="page-break"></div>
+
+<h1>SALES PROCESS FLOW</h1>
+
+<div class="flowchart-container">
+    
+    <div class="flow-row">
+        <div class="box box-start">New Sale</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-subprocess">
+            Enter Customer Details<br>
+            ↓<br>
+            Select Products<br>
+            ↓<br>
+            Enter Quantities<br>
+            ↓<br>
+            Calculate Total
+        </div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Create Invoice</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Generate Invoice #</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Save Invoice Items</div>
+        <span class="arrow">→</span>
+        <div class="box box-decision">Success?</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Update Product Stock</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Log Activity</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Display Invoice</div>
+        <span class="arrow">→</span>
+        <div class="box box-end">Print/Email Invoice</div>
+    </div>
+    
+</div>
+
+<div class="page-break"></div>
+
+<h1>USER AUTHENTICATION FLOW</h1>
+
+<div class="flowchart-container">
+    
+    <div class="flow-row">
+        <div class="box box-start">User Access</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Login Form</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Enter Credentials</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Verify Credentials</div>
+        <span class="arrow">→</span>
+        <div class="box box-decision">Valid?</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div style="display: flex; gap: 30px;">
+        <div class="flow-row" style="flex: 1; justify-content: flex-end;">
+            <span class="arrow">←</span>
+            <div class="box" style="background: #ffcdd2;">No - Show Error</div>
+        </div>
+    </div>
+    
+    <div class="flow-row">
+        <div class="box box-decision">Admin?</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div class="box box-process">Load Dashboard</div>
+        <span class="arrow">→</span>
+        <div class="box box-process">Load Sidebar (Full)</div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="flow-row">
+        <div style="display: flex; gap: 10px;">
+            <div class="box box-primary">Staff Access</div>
+            <div style="display: flex; align-items: center;">(Limited Features)</div>
+        </div>
+    </div>
+    
+    <div class="connector"></div>
+    <div class="arrow-down">↓</div>
+    <div class="connector"></div>
+    
+    <div class="box box-end">Logout</div>
+    
+</div>
+
+<div style="margin-top: 40px; text-align: center;">
+    <p><em>--- End of Flowchart ---</em></p>
+    <p><strong>Note:</strong> Print this page as PDF using browser print function (Ctrl+P)</p>
+</div>
+
+</body>
+</html>
