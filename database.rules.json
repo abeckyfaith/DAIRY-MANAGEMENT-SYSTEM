@@ -1,0 +1,61 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "animals": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$id": {
+        ".validate": "newData.hasChildren(['tag_number', 'gender'])"
+      }
+    },
+    "milk_production": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "products": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "invoices": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "expenses": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "income": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "health": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "reproduction": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "feed": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "equipment": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "suppliers": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "breeds": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}

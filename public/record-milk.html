@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Milk - Dairy Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <h3>Dairy MS</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+            <a href="animals.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-4 0-8 2-8 8 0 4 3 8 8 12 5-4 8-8 8-12 0-6-4-8-8-8z"/></svg>Animals</a>
+            <a href="milk.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 10H4L8 2z"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>Milk Records</a>
+            <a href="health.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Health</a>
+            <a href="shop.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Dairy Shop</a>
+            <a href="finance.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance</a>
+            <a href="index.html" class="nav-item" onclick="handleLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h1>Record Milk Production</h1>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="card">
+                <form id="recordMilkForm">
+                    <div class="form-group">
+                        <label>Animal Tag Number *</label>
+                        <select id="animalId" required>
+                            <option value="">Select Animal</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Recording Date *</label>
+                        <input type="date" id="recordingDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Session *</label>
+                        <select id="session" required>
+                            <option value="">Select Session</option>
+                            <option value="Morning">Morning</option>
+                            <option value="Afternoon">Afternoon</option>
+                            <option value="Evening">Evening</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (Liters) *</label>
+                        <input type="number" id="amountLiters" step="0.1" required placeholder="e.g., 5.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Fat Content (%)</label>
+                        <input type="number" id="fatContent" step="0.1" placeholder="e.g., 3.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea id="notes" rows="3" placeholder="Any additional notes..."></textarea>
+                    </div>
+                    <div class="form-actions" style="margin-top: 24px;">
+                        <a href="milk.html" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="assets/js/firebase-service.js"></script>
+    <script>
+        AuthService.onAuthStateChange(user => {
+            if (!user) window.location.href = 'index.html';
+            else loadAnimals();
+        });
+
+        async function loadAnimals() {
+            const result = await AnimalsService.getAll(1, 100);
+            const select = document.getElementById('animalId');
+            result.animals.filter(a => a.gender === 'Female').forEach(a => {
+                const option = document.createElement('option');
+                option.value = a.id;
+                option.textContent = `${a.tag_number} - ${a.breed_name || 'Unknown'}`;
+                select.appendChild(option);
+            });
+            document.getElementById('recordingDate').valueAsDate = new Date();
+        }
+
+        document.getElementById('recordMilkForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const data = {
+                animal_id: document.getElementById('animalId').value,
+                recording_date: document.getElementById('recordingDate').value,
+                session: document.getElementById('session').value,
+                amount_liters: parseFloat(document.getElementById('amountLiters').value),
+                fat_content: parseFloat(document.getElementById('fatContent').value) || null,
+                notes: document.getElementById('notes').value
+            };
+            await MilkProductionService.create(data);
+            window.location.href = 'milk.html';
+        });
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        async function handleLogout() {
+            await AuthService.logout();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

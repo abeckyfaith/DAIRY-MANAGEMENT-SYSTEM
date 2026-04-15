@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance - Dairy Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <h3>Dairy MS</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+            <a href="animals.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-4 0-8 2-8 8 0 4 3 8 8 12 5-4 8-8 8-12 0-6-4-8-8-8z"/></svg>Animals</a>
+            <a href="milk.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 10H4L8 2z"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>Milk Records</a>
+            <a href="health.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Health</a>
+            <a href="shop.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Dairy Shop</a>
+            <a href="finance.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance</a>
+            <a href="index.html" class="nav-item" onclick="handleLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <h1>Finance</h1>
+            <div class="topbar-right">
+                <a href="add-expense.html" class="btn btn-secondary">Add Expense</a>
+                <a href="add-sale.html" class="btn btn-primary">Record Sale</a>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="stats-grid" style="margin-bottom: 24px;">
+                <div class="stat-card">
+                    <div class="icon" style="background: #10b981;"><svg viewBox="0 0 24 24" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                    <div class="value" id="totalIncome">0</div>
+                    <div class="label">Total Income</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon" style="background: #ef4444;"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                    <div class="value" id="totalExpenses">0</div>
+                    <div class="label">Total Expenses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon" style="background: #3b82f6;"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                    <div class="value" id="netProfit">0</div>
+                    <div class="label">Net Profit</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="card">
+                    <div class="card-header"><h3>Recent Income</h3></div>
+                    <div class="card-body">
+                        <div class="table-container" style="box-shadow: none;">
+                            <table>
+                                <thead><tr><th>Date</th><th>Description</th><th>Amount</th></tr></thead>
+                                <tbody id="incomeTable"><tr><td colspan="3" style="text-align: center;">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3>Recent Expenses</h3></div>
+                    <div class="card-body">
+                        <div class="table-container" style="box-shadow: none;">
+                            <table>
+                                <thead><tr><th>Date</th><th>Category</th><th>Amount</th></tr></thead>
+                                <tbody id="expensesTable"><tr><td colspan="3" style="text-align: center;">Loading...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="assets/js/firebase-service.js"></script>
+    <script>
+        AuthService.onAuthStateChange(user => {
+            if (!user) window.location.href = 'index.html';
+            else loadFinance();
+        });
+
+        async function loadFinance() {
+            const income = await FinanceService.getIncome();
+            const expenses = await FinanceService.getExpenses();
+            
+            let totalIncome = 0, totalExpenses = 0;
+            
+            const incomeTable = document.getElementById('incomeTable');
+            if (income.length === 0) {
+                incomeTable.innerHTML = '<tr><td colspan="3" style="text-align: center;">No income records</td></tr>';
+            } else {
+                incomeTable.innerHTML = income.reverse().slice(0, 10).map(i => {
+                    totalIncome += parseFloat(i.amount || 0);
+                    return `<tr><td>${i.transaction_date || 'N/A'}</td><td>${i.description || '-'}</td><td style="color: #10b981;">UGX ${(i.amount || 0).toLocaleString()}</td></tr>`;
+                }).join('');
+            }
+            
+            const expensesTable = document.getElementById('expensesTable');
+            if (expenses.length === 0) {
+                expensesTable.innerHTML = '<tr><td colspan="3" style="text-align: center;">No expense records</td></tr>';
+            } else {
+                expensesTable.innerHTML = expenses.reverse().slice(0, 10).map(e => {
+                    totalExpenses += parseFloat(e.amount || 0);
+                    return `<tr><td>${e.transaction_date || 'N/A'}</td><td>${e.category || '-'}</td><td style="color: #ef4444;">UGX ${(e.amount || 0).toLocaleString()}</td></tr>`;
+                }).join('');
+            }
+            
+            document.getElementById('totalIncome').textContent = 'UGX ' + totalIncome.toLocaleString();
+            document.getElementById('totalExpenses').textContent = 'UGX ' + totalExpenses.toLocaleString();
+            const profit = totalIncome - totalExpenses;
+            document.getElementById('netProfit').textContent = 'UGX ' + profit.toLocaleString();
+            document.getElementById('netProfit').style.color = profit >= 0 ? '#10b981' : '#ef4444';
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        async function handleLogout() { await AuthService.logout(); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>
