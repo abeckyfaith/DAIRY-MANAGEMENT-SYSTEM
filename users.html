@@ -106,6 +106,7 @@
     <script>
         const user = DB.getCurrentUser();
         if (!user) location.href = 'index.html';
+        if (!isAdmin()) location.href = 'dashboard.html';
         document.getElementById('userName').textContent = user.full_name;
 
         function renderUsers() {

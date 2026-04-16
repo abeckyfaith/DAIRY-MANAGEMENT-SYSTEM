@@ -92,5 +92,16 @@ if (DB.getUsers().length === 0) {
     });
 }
 
+// Role checking
+window.isAdmin = function() {
+    const user = DB.getCurrentUser();
+    return user && (user.role === 'Admin' || user.role === 'Manager');
+};
+
+window.isWorker = function() {
+    const user = DB.getCurrentUser();
+    return user && user.role === 'Worker';
+};
+
 // Export for use
 window.DB = DB;

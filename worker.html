@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Entry - Dairy Management</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .entry-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .entry-card h3 { margin: 0 0 15px 0; color: #333; display: flex; align-items: center; gap: 10px; }
+        .entry-card h3 svg { width: 24px; height: 24px; stroke: #667eea; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; }
+        .success-msg { background: #d1fae5; color: #059669; padding: 10px; border-radius: 8px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <h1>Data Entry</h1>
+        <div class="topbar-right">
+            <span id="userName">Worker</span>
+            <button class="btn btn-logout" onclick="DB.logout(); location.href='index.html'">Logout</button>
+        </div>
+    </header>
+
+    <div class="dashboard-content" style="margin-left: 0;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            
+            <!-- Add Animal -->
+            <div class="entry-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-4 0-8 2-8 8 0 4 3 8 8 12 5-4 8-8 8-12 0-6-4-8-8-8z"/></svg>
+                    Add Animal
+                </h3>
+                <form id="animalForm">
+                    <div class="form-group"><label>Tag Number *</label><input type="text" id="tagNumber" required placeholder="e.g., DM-001"></div>
+                    <div class="form-group"><label>Gender *</label><select id="gender" required><option value="Male">Male</option><option value="Female">Female</option></select></div>
+                    <div class="form-group"><label>Breed</label><input type="text" id="breedName" placeholder="e.g., Friesian"></div>
+                    <div class="form-group"><label>Weight (kg)</label><input type="number" id="weight" placeholder="e.g., 350"></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Animal</button>
+                    <div class="success-msg" id="animalMsg">Animal saved!</div>
+                </form>
+            </div>
+
+            <!-- Record Milk -->
+            <div class="entry-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 10H4L8 2z"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
+                    Record Milk
+                </h3>
+                <form id="milkForm">
+                    <div class="form-group"><label>Date</label><input type="date" id="milkDate"></div>
+                    <div class="form-group"><label>Session *</label><select id="session" required><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option><option value="Evening">Evening</option></select></div>
+                    <div class="form-group"><label>Amount (Liters) *</label><input type="number" id="amountLiters" step="0.1" required placeholder="e.g., 5.5"></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Record</button>
+                    <div class="success-msg" id="milkMsg">Milk recorded!</div>
+                </form>
+            </div>
+
+            <!-- Health Check -->
+            <div class="entry-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    Health Check
+                </h3>
+                <form id="healthForm">
+                    <div class="form-group"><label>Animal Tag *</label><input type="text" id="healthTag" required placeholder="e.g., DM-001"></div>
+                    <div class="form-group"><label>Status</label><select id="healthStatus"><option value="Healthy">Healthy</option><option value="Sick">Sick</option><option value="Recovering">Recovering</option></select></div>
+                    <div class="form-group"><label>Notes</label><input type="text" id="healthNotes" placeholder="Any observations"></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Check</button>
+                    <div class="success-msg" id="healthMsg">Health check saved!</div>
+                </form>
+            </div>
+
+            <!-- Record Expense -->
+            <div class="entry-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Record Expense
+                </h3>
+                <form id="expenseForm">
+                    <div class="form-group"><label>Category</label><select id="expenseCategory"><option value="Feed">Feed</option><option value="Veterinary">Veterinary</option><option value="Equipment">Equipment</option><option value="Labor">Labor</option><option value="Other">Other</option></select></div>
+                    <div class="form-group"><label>Amount (UGX) *</label><input type="number" id="expenseAmount" required placeholder="e.g., 50000"></div>
+                    <div class="form-group"><label>Description</label><input type="text" id="expenseDesc" placeholder="What was purchased"></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Expense</button>
+                    <div class="success-msg" id="expenseMsg">Expense saved!</div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="storage-service.js"></script>
+    <script>
+        const user = DB.getCurrentUser();
+        if (!user) location.href = 'index.html';
+        
+        // Workers can see this page, but Admin/Manager should go to dashboard
+        if (isAdmin()) {
+            location.href = 'dashboard.html';
+        }
+        
+        document.getElementById('userName').textContent = user.full_name;
+        document.getElementById('milkDate').valueAsDate = new Date();
+
+        // Add Animal
+        document.getElementById('animalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            DB.create('animals', {
+                tag_number: document.getElementById('tagNumber').value,
+                gender: document.getElementById('gender').value,
+                breed_name: document.getElementById('breedName').value,
+                weight: parseFloat(document.getElementById('weight').value) || null
+            });
+            this.reset();
+            document.getElementById('animalMsg').style.display = 'block';
+            setTimeout(() => document.getElementById('animalMsg').style.display = 'none', 3000);
+        });
+
+        // Record Milk
+        document.getElementById('milkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            DB.create('milk_production', {
+                recording_date: document.getElementById('milkDate').value,
+                session: document.getElementById('session').value,
+                amount_liters: parseFloat(document.getElementById('amountLiters').value),
+                entered_by: user.full_name
+            });
+            this.reset();
+            document.getElementById('milkDate').valueAsDate = new Date();
+            document.getElementById('milkMsg').style.display = 'block';
+            setTimeout(() => document.getElementById('milkMsg').style.display = 'none', 3000);
+        });
+
+        // Health Check
+        document.getElementById('healthForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            DB.create('health', {
+                animal_tag: document.getElementById('healthTag').value,
+                status: document.getElementById('healthStatus').value,
+                notes: document.getElementById('healthNotes').value,
+                checked_by: user.full_name,
+                check_date: new Date().toISOString().split('T')[0]
+            });
+            this.reset();
+            document.getElementById('healthMsg').style.display = 'block';
+            setTimeout(() => document.getElementById('healthMsg').style.display = 'none', 3000);
+        });
+
+        // Record Expense
+        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            DB.create('expenses', {
+                category: document.getElementById('expenseCategory').value,
+                amount: parseFloat(document.getElementById('expenseAmount').value),
+                description: document.getElementById('expenseDesc').value,
+                recorded_by: user.full_name,
+                transaction_date: new Date().toISOString().split('T')[0]
+            });
+            this.reset();
+            document.getElementById('expenseMsg').style.display = 'block';
+            setTimeout(() => document.getElementById('expenseMsg').style.display = 'none', 3000);
+        });
+    </script>
+</body>
+</html>

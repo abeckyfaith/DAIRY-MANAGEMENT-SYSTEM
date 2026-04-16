@@ -105,10 +105,11 @@
         </form>
     </div>
 
-    <script src="storage-service.js"></script>
-    <script>
+        <script src="storage-service.js"></script>
+        <script>
         if (DB.getCurrentUser()) {
-            window.location.href = 'dashboard.html';
+            const user = DB.getCurrentUser();
+            window.location.href = (user.role === 'Admin' || user.role === 'Manager') ? 'dashboard.html' : 'worker.html';
         }
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -125,7 +126,11 @@
             setTimeout(() => {
                 const user = DB.login(email, password);
                 if (user) {
-                    window.location.href = 'dashboard.html';
+                    if (user.role === 'Admin' || user.role === 'Manager') {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        window.location.href = 'worker.html';
+                    }
                 } else {
                     error.textContent = 'Invalid email or password';
                     error.style.display = 'block';
