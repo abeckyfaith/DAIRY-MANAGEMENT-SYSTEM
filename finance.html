@@ -20,8 +20,14 @@
     </style>
 </head>
 <body>
+    <div class="bg-cow-container">
+        <svg class="bg-cow bg-cow-1" viewBox="0 0 200 200" fill="#764ba2"><ellipse cx="100" cy="110" rx="60" ry="50"/><ellipse cx="40" cy="70" rx="20" ry="12" transform="rotate(-30 40 70)"/><ellipse cx="160" cy="70" rx="20" ry="12" transform="rotate(30 160 70)"/><path d="M50 60 Q35 25 55 40" stroke="#764ba2" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M150 60 Q165 25 145 40" stroke="#764ba2" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="75" cy="95" r="12" fill="rgba(102,126,234,0.5)"/><circle cx="130" cy="115" r="8" fill="rgba(102,126,234,0.5)"/><circle cx="80" cy="90" r="8" fill="#fff"/><circle cx="130" cy="90" r="8" fill="#fff"/><circle cx="82" cy="92" r="4" fill="#333"/><circle cx="132" cy="92" r="4" fill="#333"/><ellipse cx="100" cy="130" rx="24" ry="16" fill="#f8b4d9"/><circle cx="92" cy="130" r="4" fill="#764ba2"/><circle cx="108" cy="130" r="4" fill="#764ba2"/></svg>
+        <svg class="bg-cow bg-cow-2" viewBox="0 0 200 200" fill="#667eea"><ellipse cx="100" cy="110" rx="60" ry="50"/><ellipse cx="40" cy="70" rx="20" ry="12" transform="rotate(-30 40 70)"/><ellipse cx="160" cy="70" rx="20" ry="12" transform="rotate(30 160 70)"/><path d="M50 60 Q35 25 55 40" stroke="#667eea" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M150 60 Q165 25 145 40" stroke="#667eea" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="75" cy="95" r="12" fill="rgba(118,75,162,0.5)"/><circle cx="130" cy="115" r="8" fill="rgba(118,75,162,0.5)"/><circle cx="80" cy="90" r="8" fill="#fff"/><circle cx="130" cy="90" r="8" fill="#fff"/><circle cx="82" cy="92" r="4" fill="#333"/><circle cx="132" cy="92" r="4" fill="#333"/><ellipse cx="100" cy="130" rx="24" ry="16" fill="#f8b4d9"/><circle cx="92" cy="130" r="4" fill="#667eea"/><circle cx="108" cy="130" r="4" fill="#667eea"/></svg>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><h3>Dairy MS</h3></div>
+        <button class="sidebar-close" onclick="closeSidebar()">×</button>
+        <div class="sidebar-header"><svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="25" cy="28" rx="15" ry="12" fill="white" stroke="white" stroke-width="2"/><ellipse cx="12" cy="18" rx="5" ry="3" fill="white" transform="rotate(-20 12 18)"/><ellipse cx="38" cy="18" rx="5" ry="3" fill="white" transform="rotate(20 38 18)"/><path d="M13 15 Q10 5 16 10" stroke="white" stroke-width="2" fill="none"/><path d="M37 15 Q40 5 34 10" stroke="white" stroke-width="2" fill="none"/><circle cx="20" cy="25" r="3" fill="#764ba2" opacity="0.5"/><circle cx="32" cy="29" r="2" fill="#764ba2" opacity="0.5"/><circle cx="19" cy="24" r="2" fill="white"/><circle cx="31" cy="24" r="2" fill="white"/><circle cx="19.5" cy="24.5" r="1" fill="#333"/><circle cx="31.5" cy="24.5" r="1" fill="#333"/><ellipse cx="25" cy="33" rx="6" ry="4" fill="#f8b4d9"/><circle cx="23" cy="33" r="1" fill="#764ba2"/><circle cx="27" cy="33" r="1" fill="#764ba2"/></svg><h3>Dairy MS</h3></div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
             <a href="animals.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-4 0-8 2-8 8 0 4 3 8 8 12 5-4 8-8 8-12 0-6-4-8-8-8z"/></svg>Animals</a>
@@ -33,7 +39,7 @@
         </nav>
     </aside>
     <main class="main-content">
-        <header class="topbar"><button class="menu-toggle" onclick="toggleSidebar()">☰</button><h1>Finance</h1><div class="topbar-right"><button class="btn btn-secondary" onclick="showAddExpense()">+ Add Expense</button></div></header>
+        <header class="topbar"><button class="menu-toggle" onclick="toggleSidebar()">☰</button><h1>Finance</h1><div class="topbar-right"><a href="dashboard.html" class="back-btn">← Back</a><button class="btn btn-secondary" onclick="showAddExpense()">+ Add</button></div></header>
         <div class="dashboard-content">
             <div class="stats-grid">
                 <div class="stat-card"><div class="value" id="totalIncome" style="color: #10b981;">UGX 0</div><div class="label">Total Income</div></div>
@@ -87,8 +93,11 @@
         function showAddExpense() { document.getElementById('expenseForm').reset(); document.getElementById('expenseDate').valueAsDate = new Date(); document.getElementById('expenseModal').classList.add('show'); }
         function closeModal() { document.getElementById('expenseModal').classList.remove('show'); }
         document.getElementById('expenseForm').addEventListener('submit', function(e) { e.preventDefault(); DB.create('expenses', { category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, transaction_date: document.getElementById('expenseDate').value }); closeModal(); loadFinance(); });
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
         loadFinance();
     </script>
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+    <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>
 </body>
 </html>

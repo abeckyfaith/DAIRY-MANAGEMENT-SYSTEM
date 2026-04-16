@@ -17,12 +17,25 @@
     </style>
 </head>
 <body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
     <aside class="sidebar" id="sidebar">
+        <button class="sidebar-close" onclick="closeSidebar()">×</button>
         <div class="sidebar-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
+            <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="25" cy="28" rx="15" ry="12" fill="white" stroke="white" stroke-width="2"/>
+                <ellipse cx="12" cy="18" rx="5" ry="3" fill="white" transform="rotate(-20 12 18)"/>
+                <ellipse cx="38" cy="18" rx="5" ry="3" fill="white" transform="rotate(20 38 18)"/>
+                <path d="M13 15 Q10 5 16 10" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M37 15 Q40 5 34 10" stroke="white" stroke-width="2" fill="none"/>
+                <circle cx="20" cy="25" r="3" fill="#764ba2" opacity="0.5"/>
+                <circle cx="32" cy="29" r="2" fill="#764ba2" opacity="0.5"/>
+                <circle cx="19" cy="24" r="2" fill="white"/>
+                <circle cx="31" cy="24" r="2" fill="white"/>
+                <circle cx="19.5" cy="24.5" r="1" fill="#333"/>
+                <circle cx="31.5" cy="24.5" r="1" fill="#333"/>
+                <ellipse cx="25" cy="33" rx="6" ry="4" fill="#f8b4d9"/>
+                <circle cx="23" cy="33" r="1" fill="#764ba2"/>
+                <circle cx="27" cy="33" r="1" fill="#764ba2"/>
             </svg>
             <h3>Dairy MS</h3>
         </div>
@@ -40,7 +53,10 @@
     <main class="main-content">
         <header class="topbar">
             <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <h1>Add New Animal</h1>
+            <h1>Add Animal</h1>
+            <div class="topbar-right">
+                <a href="animals.html" class="back-btn">← Back</a>
+            </div>
         </header>
 
         <div class="dashboard-content">
@@ -94,16 +110,12 @@
         </div>
     </main>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="firebase-service.js"></script>
+    <script src="storage-service.js"></script>
     <script>
-        AuthService.onAuthStateChange(user => {
-            if (!user) window.location.href = 'index.html';
-        });
+        const user = DB.getCurrentUser();
+        if (!user) window.location.href = 'index.html';
 
-        document.getElementById('addAnimalForm').addEventListener('submit', async function(e) {
+        document.getElementById('addAnimalForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const data = {
                 tag_number: document.getElementById('tagNumber').value,
@@ -114,18 +126,16 @@
                 status: document.getElementById('status').value,
                 notes: document.getElementById('notes').value
             };
-            await AnimalsService.create(data);
+            DB.create('animals', data);
             window.location.href = 'animals.html';
         });
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-        }
-
-        async function handleLogout() {
-            await AuthService.logout();
-            window.location.href = 'index.html';
-        }
+        function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
     </script>
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+    <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>
+</body>
+</html>
 </body>
 </html>

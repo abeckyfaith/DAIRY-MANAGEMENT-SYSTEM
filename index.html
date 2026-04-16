@@ -14,6 +14,38 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-cow {
+            position: absolute;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        .bg-cow-1 {
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .bg-cow-2 {
+            bottom: -150px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+        .bg-cow-3 {
+            top: 50%;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            animation: float 12s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
         .login-container {
             background: white;
@@ -22,12 +54,22 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             width: 100%;
             max-width: 400px;
+            position: relative;
+            z-index: 10;
         }
         .logo {
             text-align: center;
             margin-bottom: 30px;
         }
-        .logo svg { width: 60px; height: 60px; }
+        .logo svg { 
+            width: 80px; 
+            height: 80px; 
+            animation: cowBounce 2s ease-in-out infinite;
+        }
+        @keyframes cowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
         .logo h1 { font-size: 24px; color: #333; margin-top: 10px; }
         .logo p { color: #666; font-size: 14px; margin-top: 5px; }
         .form-group { margin-bottom: 20px; }
@@ -38,8 +80,38 @@
             border: 2px solid #e5e7eb;
             border-radius: 8px;
             font-size: 14px;
+            height: 50px;
+            box-sizing: border-box;
         }
         .form-group input:focus { outline: none; border-color: #667eea; }
+        .password-field {
+            position: relative;
+        }
+        .password-field input {
+            padding-right: 50px;
+        }
+        .password-field input::placeholder { color: #aaa; }
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            color: #667eea;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toggle-password:hover {
+            color: #764ba2;
+        }
+        .password-wrapper {
+            position: relative;
+        }
         .btn {
             width: 100%;
             padding: 14px;
@@ -51,8 +123,8 @@
             font-weight: 600;
             cursor: pointer;
         }
-        .btn:hover { opacity: 0.9; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .error {
             background: #fee2e2;
             color: #dc2626;
@@ -73,12 +145,60 @@
     </style>
 </head>
 <body>
+    <!-- Background Floating Cows -->
+    <svg class="bg-cow bg-cow-1" viewBox="0 0 200 200" fill="white">
+        <ellipse cx="100" cy="110" rx="60" ry="50"/>
+        <ellipse cx="40" cy="70" rx="20" ry="12" transform="rotate(-30 40 70)"/>
+        <ellipse cx="160" cy="70" rx="20" ry="12" transform="rotate(30 160 70)"/>
+        <path d="M50 60 Q35 25 55 40" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M150 60 Q165 25 145 40" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <circle cx="75" cy="95" r="12" fill="rgba(118,75,162,0.5)"/>
+        <circle cx="130" cy="115" r="8" fill="rgba(118,75,162,0.5)"/>
+        <circle cx="80" cy="90" r="8" fill="white"/>
+        <circle cx="130" cy="90" r="8" fill="white"/>
+        <circle cx="82" cy="92" r="4" fill="#333"/>
+        <circle cx="132" cy="92" r="4" fill="#333"/>
+        <ellipse cx="100" cy="130" rx="24" ry="16" fill="#f8b4d9"/>
+        <circle cx="92" cy="130" r="4" fill="#764ba2"/>
+        <circle cx="108" cy="130" r="4" fill="#764ba2"/>
+    </svg>
+    
+    <svg class="bg-cow bg-cow-2" viewBox="0 0 200 200" fill="white">
+        <ellipse cx="100" cy="110" rx="60" ry="50"/>
+        <ellipse cx="40" cy="70" rx="20" ry="12" transform="rotate(-30 40 70)"/>
+        <ellipse cx="160" cy="70" rx="20" ry="12" transform="rotate(30 160 70)"/>
+        <path d="M50 60 Q35 25 55 40" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <path d="M150 60 Q165 25 145 40" stroke="white" stroke-width="8" fill="none" stroke-linecap="round"/>
+        <circle cx="75" cy="95" r="12" fill="rgba(118,75,162,0.5)"/>
+        <circle cx="130" cy="115" r="8" fill="rgba(118,75,162,0.5)"/>
+        <circle cx="80" cy="90" r="8" fill="white"/>
+        <circle cx="130" cy="90" r="8" fill="white"/>
+        <circle cx="82" cy="92" r="4" fill="#333"/>
+        <circle cx="132" cy="92" r="4" fill="#333"/>
+        <ellipse cx="100" cy="130" rx="24" ry="16" fill="#f8b4d9"/>
+        <circle cx="92" cy="130" r="4" fill="#764ba2"/>
+        <circle cx="108" cy="130" r="4" fill="#764ba2"/>
+    </svg>
+
     <div class="login-container">
         <div class="logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="50" cy="55" rx="30" ry="25" fill="#667eea" stroke="#764ba2" stroke-width="3"/>
+                <ellipse cx="22" cy="35" rx="10" ry="6" fill="#667eea" stroke="#764ba2" stroke-width="2" transform="rotate(-30 22 35)"/>
+                <ellipse cx="78" cy="35" rx="10" ry="6" fill="#667eea" stroke="#764ba2" stroke-width="2" transform="rotate(30 78 35)"/>
+                <path d="M25 30 Q20 15 30 20" stroke="#764ba2" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M75 30 Q80 15 70 20" stroke="#764ba2" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <circle cx="40" cy="50" r="6" fill="#764ba2" opacity="0.6"/>
+                <circle cx="62" cy="58" r="4" fill="#764ba2" opacity="0.6"/>
+                <circle cx="55" cy="45" r="3" fill="#764ba2" opacity="0.6"/>
+                <circle cx="38" cy="48" r="4" fill="white"/>
+                <circle cx="62" cy="48" r="4" fill="white"/>
+                <circle cx="39" cy="49" r="2" fill="#333"/>
+                <circle cx="63" cy="49" r="2" fill="#333"/>
+                <ellipse cx="50" cy="65" rx="12" ry="8" fill="#f8b4d9"/>
+                <circle cx="46" cy="65" r="2" fill="#764ba2"/>
+                <circle cx="54" cy="65" r="2" fill="#764ba2"/>
+                <path d="M45 70 Q50 74 55 70" stroke="#764ba2" stroke-width="2" fill="none" stroke-linecap="round"/>
             </svg>
             <h1>Dairy Management</h1>
             <p>Sign in to continue</p>
@@ -99,14 +219,22 @@
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="password" required placeholder="Enter your password">
+                <div class="password-field">
+                    <input type="password" id="password" required placeholder="Enter your password">
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <svg id="eyeIcon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <button type="submit" class="btn" id="submitBtn">Sign In</button>
         </form>
     </div>
 
-        <script src="storage-service.js"></script>
-        <script>
+    <script src="storage-service.js"></script>
+    <script>
         if (DB.getCurrentUser()) {
             const user = DB.getCurrentUser();
             window.location.href = (user.role === 'Admin' || user.role === 'Manager') ? 'dashboard.html' : 'worker.html';
@@ -139,6 +267,18 @@
                 }
             }, 300);
         });
+
+        function togglePassword() {
+            const pwd = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                pwd.type = 'password';
+                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        }
     </script>
 </body>
 </html>
