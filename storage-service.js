@@ -1,5 +1,25 @@
 // Local Storage Service - No Firebase needed
 
+(function initDB() {
+    const prefix = 'dairy_';
+
+    // Create default admin if none exists
+    const existingUsers = JSON.parse(localStorage.getItem(prefix + 'users')) || [];
+    if (existingUsers.length === 0) {
+        const defaultAdmin = {
+            id: 'admin_' + Date.now(),
+            username: 'admin',
+            full_name: 'Administrator',
+            email: 'admin@dairy.com',
+            password: 'admin123',
+            role: 'Admin',
+            phone: '',
+            created_at: new Date().toISOString()
+        };
+        localStorage.setItem(prefix + 'users', JSON.stringify([defaultAdmin]));
+    }
+})();
+
 const DB = {
     prefix: 'dairy_',
 
@@ -79,18 +99,6 @@ const DB = {
         this.saveAll(table, items);
     }
 };
-
-// Create default admin if none exists
-if (DB.getUsers().length === 0) {
-    DB.createUser({
-        username: 'admin',
-        full_name: 'Administrator',
-        email: 'admin@dairy.com',
-        password: 'admin123',
-        role: 'Admin',
-        phone: ''
-    });
-}
 
 // Role checking
 window.isAdmin = function() {
