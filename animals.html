@@ -6,480 +6,117 @@
     <title>Animals - Dairy Management System</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .page-header h1 {
-            font-size: 24px;
-            font-weight: 700;
-        }
-        .search-bar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .search-bar input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-        .animal-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-        .detail-item {
-            padding: 12px;
-            background: #f9fafb;
-            border-radius: 8px;
-        }
-        .detail-item label {
-            font-size: 12px;
-            color: #666;
-            display: block;
-        }
-        .detail-item span {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-        }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .animal-card { background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .animal-info h4 { margin: 0 0 5px 0; color: #333; }
+        .animal-info p { margin: 0; font-size: 13px; color: #666; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .badge-male { background: #3b82f6; color: white; }
+        .badge-female { background: #ec4899; color: white; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; border-radius: 12px; padding: 30px; width: 90%; max-width: 400px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
             <h3>Dairy MS</h3>
         </div>
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a>
-            <a href="animals.html" class="nav-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-4 0-8 2-8 8 0 4 3 8 8 12 5-4 8-8 8-12 0-6-4-8-8-8z"/></svg>
-                Animals
-            </a>
-            <a href="milk.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 10H4L8 2z"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
-                Milk Records
-            </a>
-            <a href="health.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                Health
-            </a>
-            <a href="shop.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
-                Dairy Shop
-            </a>
-            <a href="finance.html" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Finance
-            </a>
-            <a href="index.html" class="nav-item" onclick="handleLogout()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                Logout
-            </a>
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+            <a href="animals.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-4 0-8 2-8 8 0 4 3 8 8 12 5-4 8-8 8-12 0-6-4-8-8-8z"/></svg>Animals</a>
+            <a href="milk.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8l4 10H4L8 2z"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>Milk Records</a>
+            <a href="shop.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Dairy Shop</a>
+            <a href="finance.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance</a>
+            <a href="users.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
+            <a href="index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Logout</a>
         </nav>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Topbar -->
         <header class="topbar">
             <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
             <h1>Animals</h1>
             <div class="topbar-right">
-                <a href="add-animal.html" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Add Animal
-                </a>
+                <button class="btn btn-primary" onclick="showAddAnimal()">+ Add Animal</button>
             </div>
         </header>
 
-        <!-- Content -->
         <div class="dashboard-content">
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search by tag number, breed, or gender..." onkeyup="filterAnimals()">
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="searchInput" placeholder="Search animals..." onkeyup="renderAnimals()" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px;">
             </div>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tag Number</th>
-                            <th>Breed</th>
-                            <th>Gender</th>
-                            <th>Birth Date</th>
-                            <th>Weight</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="animalsTable">
-                        <tr>
-                            <td colspan="7" style="text-align: center; padding: 40px; color: #999;">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination" id="pagination"></div>
+            <div id="animalsList"></div>
         </div>
     </main>
 
-    <!-- View Modal -->
-    <div class="modal" id="viewModal">
+    <div class="modal" id="animalModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="viewModalTitle">Animal Details</h2>
-                <button class="close-btn" onclick="closeModal('viewModal')">&times;</button>
-            </div>
-            <div class="modal-body" id="viewModalBody">
-                <!-- Animal details will be loaded here -->
-            </div>
+            <h2 style="margin-bottom: 20px;" id="modalTitle">Add Animal</h2>
+            <form id="animalForm">
+                <input type="hidden" id="animalId">
+                <div class="form-group"><label>Tag Number *</label><input type="text" id="tagNumber" required placeholder="e.g., DM-001"></div>
+                <div class="form-group"><label>Breed</label><input type="text" id="breedName" placeholder="e.g., Friesian"></div>
+                <div class="form-group"><label>Gender *</label><select id="gender" required><option value="Male">Male</option><option value="Female">Female</option></select></div>
+                <div class="form-group"><label>Birth Date</label><input type="date" id="birthDate"></div>
+                <div class="form-group"><label>Weight (kg)</label><input type="number" id="weight" placeholder="e.g., 350"></div>
+                <div class="form-group"><label>Notes</label><textarea id="notes" rows="2"></textarea></div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Edit Animal</h2>
-                <button class="close-btn" onclick="closeModal('editModal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="editAnimalForm">
-                    <input type="hidden" id="editId">
-                    <div class="form-group">
-                        <label>Tag Number</label>
-                        <input type="text" id="editTagNumber" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Gender</label>
-                        <select id="editGender" required>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Birth Date</label>
-                        <input type="date" id="editBirthDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Weight (kg)</label>
-                        <input type="number" id="editWeight" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select id="editStatus">
-                            <option value="Active">Active</option>
-                            <option value="Sold">Sold</option>
-                            <option value="Died">Died</option>
-                            <option value="Culled">Culled</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Notes</label>
-                        <textarea id="editNotes"></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="firebase-service.js"></script>
-
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .modal-header h2 {
-            font-size: 18px;
-        }
-        .close-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: #f3f4f6;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .modal-body {
-            padding: 20px;
-        }
-        .action-btns {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
-        }
-    </style>
-
+    <script src="storage-service.js"></script>
     <script>
-        let allAnimals = [];
-        let currentPage = 1;
-        const itemsPerPage = 10;
-
-        // Check authentication
-        AuthService.onAuthStateChange(user => {
-            if (!user) {
-                window.location.href = 'index.html';
-            } else {
-                loadAnimals();
-            }
-        });
-
-        async function loadAnimals() {
-            try {
-                const result = await AnimalsService.getAll(1, 100);
-                allAnimals = result.animals;
-                renderAnimals();
-            } catch (error) {
-                console.error('Error loading animals:', error);
-                document.getElementById('animalsTable').innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #ef4444;">
-                            Error loading animals. Please check Firebase configuration.
-                        </td>
-                    </tr>
-                `;
-            }
-        }
+        if (!DB.getCurrentUser()) location.href = 'index.html';
 
         function renderAnimals() {
-            const tbody = document.getElementById('animalsTable');
+            let animals = DB.getAll('animals');
             const search = document.getElementById('searchInput').value.toLowerCase();
-            
-            // Filter
-            let filtered = allAnimals;
-            if (search) {
-                filtered = allAnimals.filter(a => 
-                    (a.tag_number || '').toLowerCase().includes(search) ||
-                    (a.breed_name || '').toLowerCase().includes(search) ||
-                    (a.gender || '').toLowerCase().includes(search)
-                );
-            }
-
-            // Pagination
-            const totalPages = Math.ceil(filtered.length / itemsPerPage);
-            const start = (currentPage - 1) * itemsPerPage;
-            const paginated = filtered.slice(start, start + itemsPerPage);
-
-            if (paginated.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #999;">
-                            No animals found
-                        </td>
-                    </tr>
-                `;
-            } else {
-                tbody.innerHTML = paginated.map(a => `
-                    <tr>
-                        <td><strong>${a.tag_number || 'N/A'}</strong></td>
-                        <td>${a.breed_name || 'Unknown'}</td>
-                        <td>${a.gender || 'N/A'}</td>
-                        <td>${formatDate(a.birth_date)}</td>
-                        <td>${a.weight || '-'} kg</td>
-                        <td><span class="badge ${getStatusClass(a.status)}">${a.status || 'Active'}</span></td>
-                        <td>
-                            <div class="action-btns">
-                                <button class="btn btn-sm btn-secondary" onclick="viewAnimal('${a.id}')">View</button>
-                                <button class="btn btn-sm btn-primary" onclick="editAnimal('${a.id}')">Edit</button>
-                                <button class="btn btn-sm btn-logout" onclick="deleteAnimal('${a.id}')">Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            // Pagination
-            renderPagination(totalPages);
+            if (search) animals = animals.filter(a => (a.tag_number || '').toLowerCase().includes(search) || (a.breed_name || '').toLowerCase().includes(search));
+            const list = document.getElementById('animalsList');
+            if (animals.length === 0) { list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No animals found. Click "+ Add Animal" to get started.</p>'; return; }
+            list.innerHTML = animals.map(a => `<div class="animal-card"><div class="animal-info"><h4>${a.tag_number || 'N/A'} <span class="badge badge-${(a.gender || '').toLowerCase()}">${a.gender || 'N/A'}</span></h4><p>${a.breed_name || 'Unknown'} | ${a.weight || '-'} kg | ${a.birth_date || ''}</p></div><div style="display: flex; gap: 8px;"><button class="btn btn-sm btn-secondary" onclick="editAnimal('${a.id}')">Edit</button><button class="btn btn-sm btn-logout" onclick="deleteAnimal('${a.id}')">Delete</button></div></div>`).join('');
         }
 
-        function renderPagination(totalPages) {
-            const pagination = document.getElementById('pagination');
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
+        function showAddAnimal() { document.getElementById('modalTitle').textContent = 'Add Animal'; document.getElementById('animalForm').reset(); document.getElementById('animalId').value = ''; document.getElementById('animalModal').classList.add('show'); }
 
-            let html = '';
-            for (let i = 1; i <= totalPages; i++) {
-                html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
-            }
-            pagination.innerHTML = html;
-        }
-
-        function goToPage(page) {
-            currentPage = page;
-            renderAnimals();
-        }
-
-        function filterAnimals() {
-            currentPage = 1;
-            renderAnimals();
-        }
-
-        async function viewAnimal(id) {
-            const animal = await AnimalsService.getById(id);
+        function editAnimal(id) {
+            const animal = DB.getAll('animals').find(a => a.id === id);
             if (animal) {
-                document.getElementById('viewModalTitle').textContent = animal.tag_number;
-                document.getElementById('viewModalBody').innerHTML = `
-                    <div class="animal-details">
-                        <div class="detail-item">
-                            <label>Tag Number</label>
-                            <span>${animal.tag_number || 'N/A'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Breed</label>
-                            <span>${animal.breed_name || 'Unknown'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Gender</label>
-                            <span>${animal.gender || 'N/A'}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Birth Date</label>
-                            <span>${formatDate(animal.birth_date)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Weight</label>
-                            <span>${animal.weight || '-'} kg</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Status</label>
-                            <span class="badge ${getStatusClass(animal.status)}">${animal.status || 'Active'}</span>
-                        </div>
-                    </div>
-                    ${animal.notes ? `<div style="margin-top: 16px;"><label style="font-size: 12px; color: #666;">Notes</label><p>${animal.notes}</p></div>` : ''}
-                `;
-                document.getElementById('viewModal').classList.add('show');
+                document.getElementById('modalTitle').textContent = 'Edit Animal';
+                document.getElementById('animalId').value = id;
+                document.getElementById('tagNumber').value = animal.tag_number || '';
+                document.getElementById('breedName').value = animal.breed_name || '';
+                document.getElementById('gender').value = animal.gender || 'Male';
+                document.getElementById('birthDate').value = animal.birth_date || '';
+                document.getElementById('weight').value = animal.weight || '';
+                document.getElementById('notes').value = animal.notes || '';
+                document.getElementById('animalModal').classList.add('show');
             }
         }
 
-        async function editAnimal(id) {
-            const animal = await AnimalsService.getById(id);
-            if (animal) {
-                document.getElementById('editId').value = id;
-                document.getElementById('editTagNumber').value = animal.tag_number || '';
-                document.getElementById('editGender').value = animal.gender || 'Male';
-                document.getElementById('editBirthDate').value = animal.birth_date || '';
-                document.getElementById('editWeight').value = animal.weight || '';
-                document.getElementById('editStatus').value = animal.status || 'Active';
-                document.getElementById('editNotes').value = animal.notes || '';
-                document.getElementById('editModal').classList.add('show');
-            }
-        }
+        function closeModal() { document.getElementById('animalModal').classList.remove('show'); }
 
-        document.getElementById('editAnimalForm').addEventListener('submit', async function(e) {
+        document.getElementById('animalForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const id = document.getElementById('editId').value;
-            
-            const data = {
-                tag_number: document.getElementById('editTagNumber').value,
-                gender: document.getElementById('editGender').value,
-                birth_date: document.getElementById('editBirthDate').value,
-                weight: parseFloat(document.getElementById('editWeight').value) || null,
-                status: document.getElementById('editStatus').value,
-                notes: document.getElementById('editNotes').value
-            };
-
-            await AnimalsService.update(id, data);
-            closeModal('editModal');
-            loadAnimals();
+            const id = document.getElementById('animalId').value;
+            const data = { tag_number: document.getElementById('tagNumber').value, breed_name: document.getElementById('breedName').value, gender: document.getElementById('gender').value, birth_date: document.getElementById('birthDate').value, weight: parseFloat(document.getElementById('weight').value) || null, notes: document.getElementById('notes').value };
+            if (id) DB.update('animals', id, data); else DB.create('animals', data);
+            closeModal(); renderAnimals();
         });
 
-        async function deleteAnimal(id) {
-            if (confirm('Are you sure you want to delete this animal?')) {
-                await AnimalsService.delete(id);
-                loadAnimals();
-            }
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return 'N/A';
-            return new Date(dateStr).toLocaleDateString();
-        }
-
-        function getStatusClass(status) {
-            switch(status) {
-                case 'Active': return 'badge-success';
-                case 'Sold': return 'badge-info';
-                case 'Died': return 'badge-danger';
-                case 'Culled': return 'badge-warning';
-                default: return 'badge-info';
-            }
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
-
-        async function handleLogout() {
-            await AuthService.logout();
-            window.location.href = 'index.html';
-        }
-
-        // Close modal on outside click
-        window.onclick = function(e) {
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.remove('show');
-            }
-        }
+        function deleteAnimal(id) { if (confirm('Delete this animal?')) { DB.delete('animals', id); renderAnimals(); } }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+        renderAnimals();
     </script>
 </body>
 </html>
