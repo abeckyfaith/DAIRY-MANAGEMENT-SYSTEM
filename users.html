@@ -139,24 +139,6 @@
     <script>
         let currentUser = null;
 
-        auth.onAuthStateChanged(async function(user) {
-            if (!user) {
-                location.href = 'index.html';
-                return;
-            }
-            currentUser = await DB.getUserData();
-            if (!currentUser) {
-                location.href = 'index.html';
-                return;
-            }
-            if (currentUser.role !== 'Admin' && currentUser.role !== 'Manager') {
-                location.href = 'dashboard.html';
-                return;
-            }
-            document.getElementById('userName').textContent = currentUser.full_name;
-            renderUsers();
-        });
-
         async function renderUsers() {
             const users = await DB.getUsers();
             const list = document.getElementById('usersList');
@@ -228,6 +210,12 @@
                 pwd.type = 'password';
             }
         }
+
+        (async function() {
+            currentUser = await DB.getUserData();
+            document.getElementById('userName').textContent = currentUser?.full_name || 'Admin';
+            renderUsers();
+        })();
 
         function toggleUserPassword(id, password) {
             const pwdSpan = document.getElementById('pwd-' + id);

@@ -265,26 +265,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="storage-service.js"></script>
     <script>
-        let currentUser = null;
-
-        auth.onAuthStateChanged(async function(user) {
-            if (!user) {
-                location.href = 'index.html';
-                return;
-            }
-            currentUser = await DB.getUserData();
-            if (!currentUser) {
-                location.href = 'index.html';
-                return;
-            }
-            if (currentUser.role !== 'Admin' && currentUser.role !== 'Manager') {
-                location.href = 'worker.html';
-                return;
-            }
-            document.getElementById('userName').textContent = currentUser.full_name;
-            loadDashboard();
-        });
-
         async function loadDashboard() {
             const animals = await DB.getAllAnimals();
             const milk = await DB.getAllMilk();
@@ -324,6 +304,12 @@
             document.getElementById('sidebar').classList.remove('open');
             document.getElementById('sidebarOverlay').classList.remove('show');
         }
+
+        (async function() {
+            const currentUser = await DB.getUserData();
+            document.getElementById('userName').textContent = currentUser?.full_name || 'User';
+            loadDashboard();
+        })();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>

@@ -102,11 +102,6 @@
     <script>
         let allAnimals = [];
 
-        auth.onAuthStateChanged(function(user) {
-            if (!user) location.href = 'index.html';
-            else renderAnimals();
-        });
-
         async function renderAnimals() {
             allAnimals = await DB.getAllAnimals();
             const search = document.getElementById('searchInput').value.toLowerCase();
@@ -147,6 +142,7 @@
         async function deleteAnimal(id) { if (confirm('Delete this animal?')) { await DB.deleteAnimal(id); renderAnimals(); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
+        renderAnimals();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>

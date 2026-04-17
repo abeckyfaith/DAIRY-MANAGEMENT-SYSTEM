@@ -124,9 +124,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) window.location.href = 'index.html';
-
         function loadEquipment() {
             const items = DB.getAll('equipment');
             const tbody = document.getElementById('equipmentTable');

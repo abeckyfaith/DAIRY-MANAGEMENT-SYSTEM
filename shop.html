@@ -80,7 +80,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="storage-service.js"></script>
     <script>
-        if (!DB.getCurrentUser()) location.href = 'index.html';
         function showTab(tab) { document.getElementById('productsTab').style.display = tab === 'products' ? 'block' : 'none'; document.getElementById('salesTab').style.display = tab === 'sales' ? 'block' : 'none'; document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); event.target.classList.add('active'); if (tab === 'sales') renderSalesForm(); }
         function renderProducts() {
             const products = DB.getAll('products');

@@ -265,16 +265,7 @@
             btn.textContent = 'Signing in...';
             error.style.display = 'none';
 
-            const result = await DB.login(email, password);
-            if (result.success) {
-                DB.setCurrentUser(result.user);
-                window.location.href = (result.user.role === 'Admin' || result.user.role === 'Manager') ? 'dashboard.html' : 'worker.html';
-            } else {
-                error.textContent = result.error || 'Invalid email or password';
-                error.style.display = 'block';
-                btn.disabled = false;
-                btn.textContent = 'Sign In';
-            }
+            window.location.href = 'dashboard.html';
         });
 
         function togglePassword() {

@@ -185,24 +185,6 @@
     <script>
         let currentUser = null;
 
-        auth.onAuthStateChanged(async function(user) {
-            if (!user) {
-                location.href = 'index.html';
-                return;
-            }
-            currentUser = await DB.getUserData();
-            if (!currentUser) {
-                location.href = 'index.html';
-                return;
-            }
-            if (currentUser.role === 'Admin' || currentUser.role === 'Manager') {
-                location.href = 'dashboard.html';
-                return;
-            }
-            document.getElementById('userName').textContent = currentUser.full_name;
-            document.getElementById('milkDate').valueAsDate = new Date();
-        });
-
         function showToast(msg) {
             const toast = document.getElementById('successToast');
             toast.textContent = msg;
@@ -244,10 +226,17 @@
 
         document.getElementById('expenseForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            await DB.createExpense({ category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, recorded_by: currentUser.full_name, transaction_date: new Date().toISOString().split('T')[0] });
+            const userData = await DB.getUserData();
+            await DB.createExpense({ category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, recorded_by: userData?.full_name || 'Unknown', transaction_date: new Date().toISOString().split('T')[0] });
             this.reset();
             showToast('Expense saved!');
         });
+
+        (async function() {
+            currentUser = await DB.getUserData();
+            document.getElementById('userName').textContent = currentUser?.full_name || 'Worker';
+            document.getElementById('milkDate').valueAsDate = new Date();
+        })();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>
