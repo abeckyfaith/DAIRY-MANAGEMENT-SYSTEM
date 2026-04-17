@@ -21,24 +21,38 @@
     window.database = firebase.database();
 
     // Create default admin user if none exists
-    checkDefaultAdmin();
+    initDefaultAdmin();
 })();
 
 // Create default admin if none exists
-async function checkDefaultAdmin() {
-    const snapshot = await database.ref('users').orderByChild('email').equalTo('admin@dairy.com').once('value');
-    if (!snapshot.exists()) {
-        // Create default admin
-        const adminData = {
-            username: 'admin',
-            full_name: 'Administrator',
-            email: 'admin@dairy.com',
-            password: 'admin123',
-            role: 'Admin',
-            phone: '',
-            created_at: firebase.database.ServerValue.TIMESTAMP
-        };
-        await database.ref('users').push(adminData);
+async function initDefaultAdmin() {
+    try {
+        // First, try to sign in silently - if already exists, do nothing
+        const snapshot = await database.ref('users').orderByChild('email').equalTo('admin@dairy.com').once('value');
+        if (!snapshot.exists()) {
+            // User doesn't exist in DB, create them in Firebase Auth first
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword('admin@dairy.com', 'admin123');
+                // Then create their data in the database
+                await database.ref('users').push({
+                    username: 'admin',
+                    full_name: 'Administrator',
+                    email: 'admin@dairy.com',
+                    role: 'Admin',
+                    phone: '',
+                    created_at: firebase.database.ServerValue.TIMESTAMP
+                });
+                // Sign out after creating (user will login manually)
+                await auth.signOut();
+            } catch (e) {
+                // If "email-already-exists" error, user is already registered in Auth
+                if (e.code !== 'auth/email-already-in-use') {
+                    console.log('Admin check:', e.message);
+                }
+            }
+        }
+    } catch (e) {
+        console.log('Init error:', e.message);
     }
 }
 
@@ -49,11 +63,26 @@ const DB = {
     async login(email, password) {
         try {
             await auth.signInWithEmailAndPassword(email, password);
-            const user = await this.getUserData();
-            return user;
+            const userData = await this.getUserData();
+            return { success: true, user: userData };
         } catch (error) {
             console.error('Login error:', error);
-            return null;
+            return { success: false, error: this.getAuthErrorMessage(error.code) };
+        }
+    },
+
+    getAuthErrorMessage(code) {
+        switch(code) {
+            case 'auth/user-not-found':
+                return 'No account found with this email';
+            case 'auth/wrong-password':
+                return 'Incorrect password';
+            case 'auth/invalid-email':
+                return 'Invalid email address';
+            case 'auth/too-many-requests':
+                return 'Too many attempts. Try again later';
+            default:
+                return 'Login failed. Please try again';
         }
     },
 
