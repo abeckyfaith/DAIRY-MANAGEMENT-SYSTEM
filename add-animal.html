@@ -110,10 +110,11 @@
 
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) window.location.href = 'index.html';
+        auth.onAuthStateChanged(function(user) {
+            if (!user) window.location.href = 'index.html';
+        });
 
-        document.getElementById('addAnimalForm').addEventListener('submit', function(e) {
+        document.getElementById('addAnimalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const data = {
                 tag_number: document.getElementById('tagNumber').value,
@@ -124,7 +125,7 @@
                 status: document.getElementById('status').value,
                 notes: document.getElementById('notes').value
             };
-            DB.create('animals', data);
+            await DB.createAnimal(data);
             window.location.href = 'animals.html';
         });
 

@@ -87,11 +87,12 @@
 
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) window.location.href = 'index.html';
+        auth.onAuthStateChanged(function(user) {
+            if (!user) window.location.href = 'index.html';
+        });
         document.getElementById('expenseDate').valueAsDate = new Date();
 
-        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+        document.getElementById('expenseForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const data = {
                 category: document.getElementById('category').value,
@@ -99,7 +100,7 @@
                 description: document.getElementById('description').value,
                 transaction_date: document.getElementById('expenseDate').value
             };
-            DB.create('expenses', data);
+            await DB.createExpense(data);
             window.location.href = 'finance.html';
         });
 
