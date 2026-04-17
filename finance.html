@@ -88,11 +88,15 @@
     </div>
     <script src="storage-service.js"></script>
     <script>
-        if (!DB.getCurrentUser()) location.href = 'index.html';
+        auth.onAuthStateChanged(function(user) {
+            if (!user) location.href = 'index.html';
+        });
+
         document.getElementById('expenseDate').valueAsDate = new Date();
-        function loadFinance() {
-            const income = DB.getAll('income');
-            const expenses = DB.getAll('expenses');
+
+        async function loadFinance() {
+            const income = await DB.getAllIncome();
+            const expenses = await DB.getAllExpenses();
             const totalIncome = income.reduce((a, b) => a + (b.amount || 0), 0);
             const totalExpenses = expenses.reduce((a, b) => a + (b.amount || 0), 0);
             document.getElementById('totalIncome').textContent = 'UGX ' + totalIncome.toLocaleString();
@@ -103,11 +107,20 @@
             document.getElementById('incomeList').innerHTML = income.length === 0 ? '<p style="color:#999;">No income</p>' : income.slice(-5).reverse().map(i => `<div class="record-card"><span>${i.description || ''}</span><strong style="color:#10b981;">UGX ${(i.amount || 0).toLocaleString()}</strong></div>`).join('');
             document.getElementById('expensesList').innerHTML = expenses.length === 0 ? '<p style="color:#999;">No expenses</p>' : expenses.slice(-5).reverse().map(e => `<div class="record-card"><span>${e.description || e.category || ''}</span><strong style="color:#ef4444;">UGX ${(e.amount || 0).toLocaleString()}</strong></div>`).join('');
         }
+
         function showAddExpense() { document.getElementById('expenseForm').reset(); document.getElementById('expenseDate').valueAsDate = new Date(); document.getElementById('expenseModal').classList.add('show'); }
         function closeModal() { document.getElementById('expenseModal').classList.remove('show'); }
-        document.getElementById('expenseForm').addEventListener('submit', function(e) { e.preventDefault(); DB.create('expenses', { category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, transaction_date: document.getElementById('expenseDate').value }); closeModal(); loadFinance(); });
+
+        document.getElementById('expenseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await DB.createExpense({ category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, transaction_date: document.getElementById('expenseDate').value });
+            closeModal();
+            loadFinance();
+        });
+
         function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
+
         loadFinance();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>

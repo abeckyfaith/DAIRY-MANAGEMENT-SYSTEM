@@ -75,23 +75,38 @@
     </div>
     <script src="storage-service.js"></script>
     <script>
-        if (!DB.getCurrentUser()) location.href = 'index.html';
+        auth.onAuthStateChanged(function(user) {
+            if (!user) location.href = 'index.html';
+        });
+
         document.getElementById('recordingDate').valueAsDate = new Date();
-        function renderMilk() {
-            let records = DB.getAll('milk_production');
+
+        async function renderMilk() {
+            const records = await DB.getAllMilk();
             const filterDate = document.getElementById('filterDate').value;
-            if (filterDate) records = records.filter(m => m.recording_date === filterDate);
-            records.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            let filtered = records;
+            if (filterDate) filtered = records.filter(m => m.recording_date === filterDate);
+            filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             const list = document.getElementById('milkList');
-            if (records.length === 0) { list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No milk records yet.</p>'; return; }
-            list.innerHTML = records.map(m => `<div class="record-card"><div><strong style="font-size: 18px;">${m.amount_liters || 0} L</strong><p style="margin: 5px 0 0 0; color: #666;">${m.recording_date || ''} | ${m.session || ''}</p></div><div style="display: flex; gap: 8px;"><button class="btn btn-sm btn-logout" onclick="deleteMilk('${m.id}')">Delete</button></div></div>`).join('');
+            if (filtered.length === 0) { list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No milk records yet.</p>'; return; }
+            list.innerHTML = filtered.map(m => `<div class="record-card"><div><strong style="font-size: 18px;">${m.amount_liters || 0} L</strong><p style="margin: 5px 0 0 0; color: #666;">${m.recording_date || ''} | ${m.session || ''}</p></div><div style="display: flex; gap: 8px;"><button class="btn btn-sm btn-logout" onclick="deleteMilk('${m.id}')">Delete</button></div></div>`).join('');
         }
+
         function showAddMilk() { document.getElementById('milkForm').reset(); document.getElementById('recordingDate').valueAsDate = new Date(); document.getElementById('milkModal').classList.add('show'); }
         function closeModal() { document.getElementById('milkModal').classList.remove('show'); }
-        document.getElementById('milkForm').addEventListener('submit', function(e) { e.preventDefault(); DB.create('milk_production', { recording_date: document.getElementById('recordingDate').value, session: document.getElementById('session').value, amount_liters: parseFloat(document.getElementById('amountLiters').value), notes: document.getElementById('milkNotes').value }); closeModal(); renderMilk(); });
-        function deleteMilk(id) { if (confirm('Delete this record?')) { DB.delete('milk_production', id); renderMilk(); } }
+
+        document.getElementById('milkForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            await DB.createMilk({ recording_date: document.getElementById('recordingDate').value, session: document.getElementById('session').value, amount_liters: parseFloat(document.getElementById('amountLiters').value), notes: document.getElementById('milkNotes').value });
+            closeModal();
+            renderMilk();
+        });
+
+        async function deleteMilk(id) { if (confirm('Delete this record?')) { await DB.deleteMilk(id); renderMilk(); } }
+
         function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
+
         renderMilk();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>

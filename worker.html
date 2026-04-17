@@ -179,12 +179,25 @@
 
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) location.href = 'index.html';
-        if (isAdmin()) location.href = 'dashboard.html';
-        
-        document.getElementById('userName').textContent = user.full_name;
-        document.getElementById('milkDate').valueAsDate = new Date();
+        let currentUser = null;
+
+        auth.onAuthStateChanged(async function(user) {
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            currentUser = await DB.getUserData();
+            if (!currentUser) {
+                location.href = 'index.html';
+                return;
+            }
+            if (currentUser.role === 'Admin' || currentUser.role === 'Manager') {
+                location.href = 'dashboard.html';
+                return;
+            }
+            document.getElementById('userName').textContent = currentUser.full_name;
+            document.getElementById('milkDate').valueAsDate = new Date();
+        });
 
         function showToast(msg) {
             const toast = document.getElementById('successToast');
@@ -203,31 +216,31 @@
             document.getElementById('sidebarOverlay').classList.remove('show');
         }
 
-        document.getElementById('animalForm').addEventListener('submit', function(e) {
+        document.getElementById('animalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            DB.create('animals', { tag_number: document.getElementById('tagNumber').value, gender: document.getElementById('gender').value, breed_name: document.getElementById('breedName').value, weight: parseFloat(document.getElementById('weight').value) || null, entered_by: user.full_name });
+            await DB.createAnimal({ tag_number: document.getElementById('tagNumber').value, gender: document.getElementById('gender').value, breed_name: document.getElementById('breedName').value, weight: parseFloat(document.getElementById('weight').value) || null, entered_by: currentUser.full_name });
             this.reset();
             showToast('Animal saved!');
         });
 
-        document.getElementById('milkForm').addEventListener('submit', function(e) {
+        document.getElementById('milkForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            DB.create('milk_production', { recording_date: document.getElementById('milkDate').value, session: document.getElementById('session').value, amount_liters: parseFloat(document.getElementById('amountLiters').value), animal_tag: document.getElementById('milkAnimalTag').value, entered_by: user.full_name });
+            await DB.createMilk({ recording_date: document.getElementById('milkDate').value, session: document.getElementById('session').value, amount_liters: parseFloat(document.getElementById('amountLiters').value), animal_tag: document.getElementById('milkAnimalTag').value, entered_by: currentUser.full_name });
             this.reset();
             document.getElementById('milkDate').valueAsDate = new Date();
             showToast('Milk recorded!');
         });
 
-        document.getElementById('healthForm').addEventListener('submit', function(e) {
+        document.getElementById('healthForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            DB.create('health', { animal_tag: document.getElementById('healthTag').value, status: document.getElementById('healthStatus').value, notes: document.getElementById('healthNotes').value, checked_by: user.full_name, check_date: new Date().toISOString().split('T')[0] });
+            await DB.createHealth({ animal_tag: document.getElementById('healthTag').value, status: document.getElementById('healthStatus').value, notes: document.getElementById('healthNotes').value, checked_by: currentUser.full_name, check_date: new Date().toISOString().split('T')[0] });
             this.reset();
             showToast('Health check saved!');
         });
 
-        document.getElementById('expenseForm').addEventListener('submit', function(e) {
+        document.getElementById('expenseForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            DB.create('expenses', { category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, recorded_by: user.full_name, transaction_date: new Date().toISOString().split('T')[0] });
+            await DB.createExpense({ category: document.getElementById('expenseCategory').value, amount: parseFloat(document.getElementById('expenseAmount').value), description: document.getElementById('expenseDesc').value, recorded_by: currentUser.full_name, transaction_date: new Date().toISOString().split('T')[0] });
             this.reset();
             showToast('Expense saved!');
         });

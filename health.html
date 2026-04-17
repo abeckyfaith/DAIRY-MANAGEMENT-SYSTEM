@@ -134,13 +134,24 @@
 
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) window.location.href = 'index.html';
+        let currentUser = null;
+        let allAnimals = [];
 
-        function loadAnimals() {
-            const animals = DB.getAll('animals');
+        auth.onAuthStateChanged(async function(user) {
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+            currentUser = await DB.getUserData();
+            await loadAnimals();
+            await loadRecords();
+        });
+
+        async function loadAnimals() {
+            allAnimals = await DB.getAllAnimals();
             const select = document.getElementById('animalId');
-            animals.forEach(a => {
+            select.innerHTML = '<option value="">Select Animal</option>';
+            allAnimals.forEach(a => {
                 const option = document.createElement('option');
                 option.value = a.id;
                 option.textContent = `${a.tag_number} - ${a.breed_name || 'Unknown'}`;
@@ -149,8 +160,8 @@
             document.getElementById('checkDate').valueAsDate = new Date();
         }
 
-        function loadRecords() {
-            const records = DB.getAll('health');
+        async function loadRecords() {
+            const records = await DB.getAllHealth();
             const tbody = document.getElementById('healthTable');
             if (records.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #999;">No health records</td></tr>';
@@ -167,7 +178,7 @@
             }
         }
 
-        document.getElementById('healthForm').addEventListener('submit', function(e) {
+        document.getElementById('healthForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const data = {
                 animal_id: document.getElementById('animalId').value,
@@ -178,7 +189,7 @@
                 temperature: parseFloat(document.getElementById('temperature').value) || null,
                 veterinarian: document.getElementById('veterinarian').value
             };
-            DB.create('health', data);
+            await DB.createHealth(data);
             document.getElementById('healthForm').reset();
             document.getElementById('checkDate').valueAsDate = new Date();
             loadRecords();
@@ -186,8 +197,6 @@
 
         function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
-        loadAnimals();
-        loadRecords();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>

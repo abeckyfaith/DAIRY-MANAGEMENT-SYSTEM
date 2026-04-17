@@ -133,15 +133,30 @@
 
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) location.href = 'index.html';
-        if (!isAdmin()) location.href = 'dashboard.html';
-        document.getElementById('userName').textContent = user.full_name;
+        let currentUser = null;
 
-        function renderUsers() {
-            const users = DB.getUsers();
+        auth.onAuthStateChanged(async function(user) {
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            currentUser = await DB.getUserData();
+            if (!currentUser) {
+                location.href = 'index.html';
+                return;
+            }
+            if (currentUser.role !== 'Admin' && currentUser.role !== 'Manager') {
+                location.href = 'dashboard.html';
+                return;
+            }
+            document.getElementById('userName').textContent = currentUser.full_name;
+            renderUsers();
+        });
+
+        async function renderUsers() {
+            const users = await DB.getUsers();
             const list = document.getElementById('usersList');
-            
+
             if (users.length === 0) {
                 list.innerHTML = '<p style="text-align: center; color: #999;">No users found</p>';
                 return;
@@ -155,7 +170,7 @@
                         <p style="margin-top: 5px;">Password: <span class="password-text" id="pwd-${u.id}">${u.password ? '••••••••' : 'N/A'}</span> <button class="show-pass-btn" onclick="toggleUserPassword('${u.id}', '${u.password || ''}')" id="btn-${u.id}">(Show)</button></p>
                     </div>
                     <div class="user-actions">
-                        ${u.id !== user.id ? `<button class="btn btn-logout" onclick="deleteUser('${u.id}')" style="padding: 8px 12px; font-size: 12px;">Delete</button>` : '<span style="color: #999; font-size: 12px;">(You)</span>'}
+                        ${u.id !== currentUser.id ? `<button class="btn btn-logout" onclick="deleteUser('${u.id}')" style="padding: 8px 12px; font-size: 12px;">Delete</button>` : '<span style="color: #999; font-size: 12px;">(You)</span>'}
                     </div>
                 </div>
             `).join('');
@@ -169,9 +184,9 @@
             document.getElementById('addUserModal').classList.remove('show');
         }
 
-        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+        document.getElementById('addUserForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            DB.createUser({
+            await DB.createUser({
                 username: document.getElementById('newEmail').value.split('@')[0],
                 full_name: document.getElementById('newFullName').value,
                 email: document.getElementById('newEmail').value,
@@ -184,9 +199,9 @@
             renderUsers();
         });
 
-        function deleteUser(id) {
+        async function deleteUser(id) {
             if (confirm('Delete this user?')) {
-                DB.deleteUser(id);
+                await DB.deleteUser(id);
                 renderUsers();
             }
         }
@@ -221,8 +236,6 @@
                 btn.textContent = '(Show)';
             }
         }
-
-        renderUsers();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>

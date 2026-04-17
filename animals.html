@@ -96,11 +96,17 @@
 
     <script src="storage-service.js"></script>
     <script>
-        if (!DB.getCurrentUser()) location.href = 'index.html';
+        let allAnimals = [];
 
-        function renderAnimals() {
-            let animals = DB.getAll('animals');
+        auth.onAuthStateChanged(function(user) {
+            if (!user) location.href = 'index.html';
+            else renderAnimals();
+        });
+
+        async function renderAnimals() {
+            allAnimals = await DB.getAllAnimals();
             const search = document.getElementById('searchInput').value.toLowerCase();
+            let animals = allAnimals;
             if (search) animals = animals.filter(a => (a.tag_number || '').toLowerCase().includes(search) || (a.breed_name || '').toLowerCase().includes(search));
             const list = document.getElementById('animalsList');
             if (animals.length === 0) { list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No animals found. Click "+ Add Animal" to get started.</p>'; return; }
@@ -110,7 +116,7 @@
         function showAddAnimal() { document.getElementById('modalTitle').textContent = 'Add Animal'; document.getElementById('animalForm').reset(); document.getElementById('animalId').value = ''; document.getElementById('animalModal').classList.add('show'); }
 
         function editAnimal(id) {
-            const animal = DB.getAll('animals').find(a => a.id === id);
+            const animal = allAnimals.find(a => a.id === id);
             if (animal) {
                 document.getElementById('modalTitle').textContent = 'Edit Animal';
                 document.getElementById('animalId').value = id;
@@ -126,18 +132,17 @@
 
         function closeModal() { document.getElementById('animalModal').classList.remove('show'); }
 
-        document.getElementById('animalForm').addEventListener('submit', function(e) {
+        document.getElementById('animalForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const id = document.getElementById('animalId').value;
             const data = { tag_number: document.getElementById('tagNumber').value, breed_name: document.getElementById('breedName').value, gender: document.getElementById('gender').value, birth_date: document.getElementById('birthDate').value, weight: parseFloat(document.getElementById('weight').value) || null, notes: document.getElementById('notes').value };
-            if (id) DB.update('animals', id, data); else DB.create('animals', data);
+            if (id) await DB.updateAnimal(id, data); else await DB.createAnimal(data);
             closeModal(); renderAnimals();
         });
 
-        function deleteAnimal(id) { if (confirm('Delete this animal?')) { DB.delete('animals', id); renderAnimals(); } }
+        async function deleteAnimal(id) { if (confirm('Delete this animal?')) { await DB.deleteAnimal(id); renderAnimals(); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
-        renderAnimals();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>

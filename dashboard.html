@@ -261,16 +261,31 @@
 
     <script src="storage-service.js"></script>
     <script>
-        const user = DB.getCurrentUser();
-        if (!user) location.href = 'index.html';
-        if (!isAdmin()) location.href = 'worker.html';
-        document.getElementById('userName').textContent = user.full_name;
+        let currentUser = null;
 
-        function loadDashboard() {
-            const animals = DB.getAll('animals');
-            const milk = DB.getAll('milk_production');
-            const products = DB.getAll('products');
-            const income = DB.getAll('income');
+        auth.onAuthStateChanged(async function(user) {
+            if (!user) {
+                location.href = 'index.html';
+                return;
+            }
+            currentUser = await DB.getUserData();
+            if (!currentUser) {
+                location.href = 'index.html';
+                return;
+            }
+            if (currentUser.role !== 'Admin' && currentUser.role !== 'Manager') {
+                location.href = 'worker.html';
+                return;
+            }
+            document.getElementById('userName').textContent = currentUser.full_name;
+            loadDashboard();
+        });
+
+        async function loadDashboard() {
+            const animals = await DB.getAllAnimals();
+            const milk = await DB.getAllMilk();
+            const products = await DB.getAllProducts();
+            const income = await DB.getAllIncome();
 
             document.getElementById('totalAnimals').textContent = animals.length;
             document.getElementById('totalProducts').textContent = products.length;
@@ -305,8 +320,6 @@
             document.getElementById('sidebar').classList.remove('open');
             document.getElementById('sidebarOverlay').classList.remove('show');
         }
-
-        loadDashboard();
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>

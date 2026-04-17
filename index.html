@@ -239,12 +239,18 @@
 
     <script src="storage-service.js"></script>
     <script>
-        if (DB.getCurrentUser()) {
-            const user = DB.getCurrentUser();
-            window.location.href = (user.role === 'Admin' || user.role === 'Manager') ? 'dashboard.html' : 'worker.html';
-        }
+        // Wait for Firebase to initialize, then check auth state
+        auth.onAuthStateChanged(async function(firebaseUser) {
+            if (firebaseUser) {
+                const userData = await DB.getUserData();
+                if (userData) {
+                    DB.setCurrentUser(userData);
+                    window.location.href = (userData.role === 'Admin' || userData.role === 'Manager') ? 'dashboard.html' : 'worker.html';
+                }
+            }
+        });
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -255,21 +261,16 @@
             btn.textContent = 'Signing in...';
             error.style.display = 'none';
 
-            setTimeout(() => {
-                const user = DB.login(email, password);
-                if (user) {
-                    if (user.role === 'Admin' || user.role === 'Manager') {
-                        window.location.href = 'dashboard.html';
-                    } else {
-                        window.location.href = 'worker.html';
-                    }
-                } else {
-                    error.textContent = 'Invalid email or password';
-                    error.style.display = 'block';
-                    btn.disabled = false;
-                    btn.textContent = 'Sign In';
-                }
-            }, 300);
+            const user = await DB.login(email, password);
+            if (user) {
+                DB.setCurrentUser(user);
+                window.location.href = (user.role === 'Admin' || user.role === 'Manager') ? 'dashboard.html' : 'worker.html';
+            } else {
+                error.textContent = 'Invalid email or password';
+                error.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
         });
 
         function togglePassword() {
