@@ -3,9 +3,13 @@ require_once 'config/config.php';
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
+// Create admin user
+$admin_hash = password_hash('admin123', PASSWORD_DEFAULT);
+$conn->query("INSERT IGNORE INTO users (username, password, full_name, role_id) VALUES ('admin', '$admin_hash', 'System Admin', 1)");
+
 // Create staff user
 $staff_hash = password_hash('staff123', PASSWORD_DEFAULT);
-$conn->query("INSERT IGNORE INTO users (username, password, full_name, role_id) VALUES ('staff', '$staff_hash', 'John Staff', 2)");
+$conn->query("INSERT IGNORE INTO users (username, password, full_name, role_id) VALUES ('staff', '$staff_hash', 'John Staff', 4)");
 
 // Create worker user
 $worker_hash = password_hash('worker123', PASSWORD_DEFAULT);
