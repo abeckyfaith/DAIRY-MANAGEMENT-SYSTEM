@@ -57,7 +57,14 @@
                 </svg>
                 Data Entry
             </a>
-            <a href="index.html" class="nav-item" onclick="DB.logout(); return true;">
+            <a href="#" class="nav-item" onclick="showAdminLogin(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Admin Login
+            </a>
+            <a href="index.html" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                     <polyline points="16 17 21 12 16 7"/>
@@ -237,6 +244,44 @@
             document.getElementById('userName').textContent = currentUser?.full_name || 'Worker';
             document.getElementById('milkDate').valueAsDate = new Date();
         })();
+
+        function showAdminLogin() {
+            const modal = document.createElement('div');
+            modal.id = 'adminLoginModal';
+            modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999;';
+            modal.innerHTML = `
+                <div style="background:white;padding:30px;border-radius:12px;width:90%;max-width:350px;">
+                    <h2 style="margin-bottom:20px;color:#2c3e50;">Admin Login</h2>
+                    <div style="margin-bottom:15px;">
+                        <label style="display:block;margin-bottom:5px;font-size:13px;color:#555;">Email</label>
+                        <input type="email" id="adminEmail" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;">
+                    </div>
+                    <div style="margin-bottom:20px;">
+                        <label style="display:block;margin-bottom:5px;font-size:13px;color:#555;">Password</label>
+                        <input type="password" id="adminPassword" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;">
+                    </div>
+                    <div id="adminLoginError" style="color:red;font-size:13px;margin-bottom:10px;display:none;"></div>
+                    <button onclick="adminLogin()" style="width:100%;padding:12px;background:#667eea;color:white;border:none;border-radius:6px;font-size:14px;cursor:pointer;">Login</button>
+                    <button onclick="document.getElementById('adminLoginModal').remove()" style="width:100%;padding:12px;background:#eee;color:#333;border:none;border-radius:6px;font-size:14px;cursor:pointer;margin-top:8px;">Cancel</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        async function adminLogin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const error = document.getElementById('adminLoginError');
+            
+            // Simple check - admin@dairy.com / admin123
+            if (email === 'admin@dairy.com' && password === 'admin123') {
+                DB.setCurrentUser({ email: 'admin@dairy.com', full_name: 'Administrator', role: 'Admin' });
+                window.location.href = 'dashboard.html';
+            } else {
+                error.textContent = 'Invalid admin credentials';
+                error.style.display = 'block';
+            }
+        }
     </script>
     <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
     <script>window.onscroll = function() { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); }; function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }</script>

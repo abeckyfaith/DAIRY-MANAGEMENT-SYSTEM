@@ -254,19 +254,8 @@
             }
         });
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const error = document.getElementById('error');
-            const btn = document.getElementById('submitBtn');
-
-            btn.disabled = true;
-            btn.textContent = 'Signing in...';
-            error.style.display = 'none';
-
-            window.location.href = 'dashboard.html';
-        });
+        // Redirect to worker by default
+        window.location.href = 'worker.html';
 
         function togglePassword() {
             const pwd = document.getElementById('password');
