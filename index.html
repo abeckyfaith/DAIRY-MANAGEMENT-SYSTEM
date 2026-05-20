@@ -196,7 +196,7 @@
 
         <div class="error" id="error"></div>
 
-        <form id="loginForm">
+        <form id="loginForm" onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" id="email" required placeholder="Enter your email">
@@ -234,8 +234,29 @@
             }
         });
 
-        // Redirect to worker by default
-        window.location.href = 'worker.html';
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('error');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            errorEl.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+            
+            const result = await DB.login(email, password);
+            if (result.success) {
+                DB.setCurrentUser(result.user);
+                window.location.href = (result.user.role === 'Admin' || result.user.role === 'Manager') ? 'dashboard.html' : 'worker.html';
+            } else {
+                errorEl.textContent = result.error;
+                errorEl.style.display = 'block';
+            }
+            
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign In';
+        }
 
         function togglePassword() {
             const pwd = document.getElementById('password');
