@@ -14,6 +14,12 @@ $current_page = $_GET['page'] ?? 'dashboard';
             <i class="fas fa-th-large"></i> Dashboard
         </a>
         <?php endif; ?>
+        
+        <?php if (can_access_page('worker_dashboard')): ?>
+        <a href="index.php?page=worker_dashboard" class="nav-item <?php echo $current_page === 'worker_dashboard' ? 'active' : ''; ?>">
+            <i class="fas fa-user-hard-hat"></i> Worker Panel
+        </a>
+        <?php endif; ?>
 
         <?php if (can_access_page('animals')): ?>
         <a href="index.php?page=animals" class="nav-item <?php echo in_array($current_page, ['animals', 'add_animal']) ? 'active' : ''; ?>">
@@ -39,6 +45,12 @@ $current_page = $_GET['page'] ?? 'dashboard';
         </a>
         <?php endif; ?>
 
+        <?php if (can_access_page('feed')): ?>
+        <a href="index.php?page=feed" class="nav-item <?php echo in_array($current_page, ['feed', 'add_feed']) ? 'active' : ''; ?>">
+            <i class="fas fa-leaf"></i> Feed
+        </a>
+        <?php endif; ?>
+
         <?php if (can_access_page('finance')): ?>
         <a href="index.php?page=finance" class="nav-item <?php echo in_array($current_page, ['finance', 'add_income', 'add_expense']) ? 'active' : ''; ?>">
             <i class="fas fa-wallet"></i> Finance
@@ -46,7 +58,7 @@ $current_page = $_GET['page'] ?? 'dashboard';
         <?php endif; ?>
 
         <?php if (can_access_page('inventory')): ?>
-        <a href="index.php?page=inventory" class="nav-item <?php echo in_array($current_page, ['inventory', 'feed', 'add_feed']) ? 'active' : ''; ?>">
+        <a href="index.php?page=inventory" class="nav-item <?php echo $current_page === 'inventory' ? 'active' : ''; ?>">
             <i class="fas fa-cubes"></i> Inventory
         </a>
         <?php endif; ?>
