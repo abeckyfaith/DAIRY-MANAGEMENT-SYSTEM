@@ -6,9 +6,20 @@ require_once "includes/rbac.php";
 
 $page = isset($_GET["page"]) ? $_GET["page"] : "";
 
-// If no page specified, go to dashboard (which will redirect to login if needed)
+// If no page specified, redirect based on role
 if (empty($page)) {
-    redirect('dashboard');
+    $role_level = 0;
+    require_once "includes/auth.php";
+    if (is_logged_in()) {
+        $role_level = get_role_level();
+    }
+    if ($role_level == 2) {
+        redirect('worker_dashboard');
+    } elseif ($role_level == 4) {
+        redirect('manager_dashboard');
+    } else {
+        redirect('login');
+    }
 }
 
 // Route to appropriate page
