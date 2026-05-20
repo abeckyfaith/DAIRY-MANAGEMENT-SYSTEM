@@ -101,15 +101,15 @@ Today's development focused on implementing role-based access control with dedic
 - `assets/images/cow.png` - Additional cow image (referenced in assets)
 
 ### Modified Files
-- `index.php` - Added routes for new dashboard pages
-- `login_process.php` - Enhanced role-based redirection
-- `includes/rbac.php` - Updated access control rules
-- `assets/style.css` - Enhanced UI animations and logo styling
-- `templates/partials/sidebar.php` - Updated logo implementation
+- `index.html` - Fixed login: added handleLogin function, removed auto-redirect to worker
+- `index.php` - Fixed default redirect to route workers/managers to their dashboards
+- `login_process.php` - Enhanced role-based redirection (already existed)
+- `includes/rbac.php` - Updated access control: added worker_dashboard, allowed feed access for workers, removed conflicting products restriction
+- `templates/partials/sidebar.php` - Added worker_dashboard and feed links
 - `templates/partials/header.php` - Removed background animations
 - `templates/profile.php` - Fixed PHP warnings and improved reliability
 - `templates/partials/footer.php` - (minor updates if any)
-- `templates/partials/header.php` - (minor updates if any)
+- `assets/style.css` - Enhanced UI animations and logo styling
 
 ---
 
@@ -151,7 +151,9 @@ Today's development focused on implementing role-based access control with dedic
 - Both new accounts can successfully log in
 - Manager redirected to manager_dashboard after login
 - Worker redirected to worker_dashboard after login
-- Workers can access and modify product stock levels
+- Workers can access feed management page
+- Workers can view products page
+- Sidebar shows worker_dashboard and feed links when appropriate
 - Managers have access to management overview functions
 - Profile loads without PHP warnings or errors
 - Sidebar animations work smoothly on hover
@@ -168,5 +170,5 @@ Today's development focused on implementing role-based access control with dedic
 6. Regular security audits of authentication system
 
 ---
-*Changes committed in Git commit: e796815*
+*Changes committed in Git commits: bf9ba21, a81ec28, 76ab996, 1ef8281*
 *Generated on: 2026-05-20T15:47:36+03:00*
