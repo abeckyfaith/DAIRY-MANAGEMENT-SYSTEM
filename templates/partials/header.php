@@ -16,11 +16,6 @@
 </head>
 <body class="<?php echo isset($body_class) ? $body_class : ''; ?>">
 <?php if (isset($_SESSION['user_id'])): ?>
-    <!-- Fading Cow Background -->
-    <div class="bg-cow-container">
-        <svg class="bg-cow bg-cow-1" viewBox="0 0 200 200" fill="var(--primary-dark)"><ellipse cx="100" cy="110" rx="60" ry="50"/><ellipse cx="40" cy="70" rx="20" ry="12" transform="rotate(-30 40 70)"/><ellipse cx="160" cy="70" rx="20" ry="12" transform="rotate(30 160 70)"/><path d="M50 60 Q35 25 55 40" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M150 60 Q165 25 145 40" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="75" cy="95" r="12" fill="rgba(102,126,234,0.5)"/><circle cx="130" cy="115" r="8" fill="rgba(102,126,234,0.5)"/><circle cx="80" cy="90" r="8" fill="#fff"/><circle cx="130" cy="90" r="8" fill="#fff"/><circle cx="82" cy="92" r="4" fill="#333"/><circle cx="132" cy="92" r="4" fill="#333"/><ellipse cx="100" cy="130" rx="24" ry="16" fill="#f8b4d9"/><circle cx="92" cy="130" r="4" fill="var(--primary-dark)"/><circle cx="108" cy="130" r="4" fill="var(--primary-dark)"/></svg>
-        <svg class="bg-cow bg-cow-2" viewBox="0 0 200 200" fill="var(--primary)"><ellipse cx="100" cy="110" rx="60" ry="50"/><ellipse cx="40" cy="70" rx="20" ry="12" transform="rotate(-30 40 70)"/><ellipse cx="160" cy="70" rx="20" ry="12" transform="rotate(30 160 70)"/><path d="M50 60 Q35 25 55 40" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M150 60 Q165 25 145 40" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="75" cy="95" r="12" fill="rgba(118,75,162,0.5)"/><circle cx="130" cy="115" r="8" fill="rgba(118,75,162,0.5)"/><circle cx="80" cy="90" r="8" fill="#fff"/><circle cx="130" cy="90" r="8" fill="#fff"/><circle cx="82" cy="92" r="4" fill="#333"/><circle cx="132" cy="92" r="4" fill="#333"/><ellipse cx="100" cy="130" rx="24" ry="16" fill="#f8b4d9"/><circle cx="92" cy="130" r="4" fill="var(--primary)"/><circle cx="108" cy="130" r="4" fill="var(--primary)"/></svg>
-    </div>
 
     <?php require_once "templates/partials/sidebar.php"; ?>
 

@@ -41,6 +41,8 @@ if ($page === "login") {
     // Map pages to templates
     $templates = [
         'dashboard' => 'templates/dashboard.php',
+        'manager_dashboard' => 'templates/manager_dashboard.php',
+        'worker_dashboard' => 'templates/worker_dashboard.php',
         'animals' => 'templates/animals.php',
         'add_animal' => 'templates/add_animal.php',
         'milk_production' => 'templates/milk_production.php',

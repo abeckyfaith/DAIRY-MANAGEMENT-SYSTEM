@@ -18,7 +18,7 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/activity_log.php';
 
-$conn = get_db_connection();
+$user_data = get_current_user_info();
 
 $success = '';
 $error = '';
@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $full_name = sanitize_input($_POST['full_name']);
     $email = sanitize_input($_POST['email']);
     $phone = sanitize_input($_POST['phone']);
+    
+    $conn = get_db_connection();
     
     $stmt = $conn->prepare("UPDATE users SET full_name = ?, email = ?, phone = ? WHERE id = ?");
     $stmt->bind_param("sssi", $full_name, $email, $phone, $_SESSION['user_id']);
@@ -39,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         $error = "Error updating profile.";
     }
     $stmt->close();
+    $conn->close();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
@@ -49,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
     if ($new_password !== $confirm_password) {
         $error = "New passwords do not match!";
     } else {
+        $conn = get_db_connection();
         $check = $conn->prepare("SELECT password FROM users WHERE id = ?");
         $check->bind_param("i", $_SESSION['user_id']);
         $check->execute();
@@ -68,11 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
             $error = "Current password is incorrect!";
         }
         $check->close();
+        $conn->close();
     }
 }
-
-$user_data = $conn->query("SELECT * FROM users WHERE id = " . $_SESSION['user_id'])->fetch_assoc();
-$conn->close();
 ?>
 
 <div class="welcome-banner manager">
@@ -151,7 +153,7 @@ $conn->close();
                 <table class="table table-borderless">
                     <tr><td><strong>User ID:</strong></td><td><?php echo $_SESSION['user_id']; ?></td></tr>
                     <tr><td><strong>Username:</strong></td><td><?php echo htmlspecialchars($user_data['username']); ?></td></tr>
-                    <tr><td><strong>Role:</strong></td><td><span class="badge bg-primary"><?php echo htmlspecialchars($user['role_name']); ?></span></td></tr>
+                     <tr><td><strong>Role:</strong></td><td><span class="badge bg-primary"><?php echo htmlspecialchars($user_data['role_name'] ?? ''); ?></span></td></tr>
                     <tr><td><strong>Created:</strong></td><td><?php echo date('d M Y H:i', strtotime($user_data['created_at'])); ?></td></tr>
                 </table>
             </div>

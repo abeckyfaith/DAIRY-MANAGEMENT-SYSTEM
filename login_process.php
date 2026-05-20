@@ -17,7 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unset($_SESSION['redirect_url']);
             header("Location: $redirect_url");
         } else {
-            if (get_role_level() == 2) { redirect('dairy_shop'); } else { redirect('dashboard'); }
+            $role_level = get_role_level();
+            if ($role_level == 2) { 
+                redirect('worker_dashboard'); 
+            } elseif ($role_level == 4) {
+                redirect('manager_dashboard');
+            } else {
+                redirect('dashboard');
+            }
         }
     } else {
         $_SESSION['error'] = "Invalid username or password. Please try again.";

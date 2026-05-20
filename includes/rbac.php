@@ -55,7 +55,7 @@ function can_access_page($page) {
         'sales_report' => 5,
         'categories' => 5,
         'suppliers' => 5,
-        'products' => 5,
+        'products' => 3,  // Changed from 5 to 3 to allow Staff and Worker access
         'sales' => 5,
         'animals' => 5,
         'add_animal' => 5,
