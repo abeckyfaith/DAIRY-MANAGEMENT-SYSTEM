@@ -35,8 +35,8 @@ if ($role_level < 2) {
                     <a href="index.php?page=products" class="btn btn-outline-primary w-100">
                         <i class="fas fa-boxes me-2"></i> View All Products
                     </a>
-                    <a href="index.php?page=inventory" class="btn btn-outline-primary w-100">
-                        <i class="fas fa-warehouse me-2"></i> Inventory Overview
+                    <a href="index.php?page=feed" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-leaf me-2"></i> Feed Management
                     </a>
                     <button type="button" class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#quickStockUpdate">
                         <i class="fas fa-edit me-2"></i> Quick Stock Update
@@ -46,7 +46,7 @@ if ($role_level < 2) {
                 <div class="mt-3">
                     <small class="text-muted">
                         <i class="fas fa-info-circle me-1"></i>
-                        As a worker, you can view and update product stock levels.
+                        As a worker, you can view and update product/feed stock levels.
                     </small>
                 </div>
             </div>
@@ -60,22 +60,16 @@ if ($role_level < 2) {
             </div>
             <div class="card-body p-0">
                 <div class="list-group list-group-flush">
-                    <a href="index.php?page=record_milk" class="list-group-item list-group-item-action">
+                    <a href="index.php?page=dairy_shop" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1"><i class="fas fa-glass-cheers me-2"></i>Record Milk Production</h6>
-                            <small class="text-muted">Log daily milk yields</small>
+                            <h6 class="mb-1"><i class="fas fa-shopping-basket me-2"></i>Dairy Shop</h6>
+                            <small class="text-muted">View products</small>
                         </div>
                     </a>
-                    <a href="index.php?page=feed" class="list-group-item list-group-item-action">
+                    <a href="index.php?page=profile" class="list-group-item list-group-item-action">
                         <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1"><i class="fas fa-leaf me-2"></i>Feed Management</h6>
-                            <small class="text-muted">Check feed inventory</small>
-                        </div>
-                    </a>
-                    <a href="index.php?page=health_check" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h6 class="mb-1"><i class="fas fa-stethoscope me-2"></i>Animal Health Checks</h6>
-                            <small class="text-muted">Monitor animal wellbeing</small>
+                            <h6 class="mb-1"><i class="fas fa-user me-2"></i>My Profile</h6>
+                            <small class="text-muted">View profile</small>
                         </div>
                     </a>
                 </div>

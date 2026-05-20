@@ -33,7 +33,7 @@ function can_access_page($page) {
     $public_pages = ['login', 'login_process', 'logout'];
     if (in_array($page, $public_pages)) return true;
 
-    // Page access requirements (minimum role level needed)
+// Page access requirements (minimum role level needed)
     $page_access = [
         'dashboard' => 3,
         'dairy_shop' => 2,
@@ -45,6 +45,9 @@ function can_access_page($page) {
         'add_insemination' => 3,
         'profile' => 2,
         
+        // Worker-level access (Level 2)
+        'worker_dashboard' => 2,
+        
         // Admin/Owner only (Level 5)
         'finance' => 5,
         'add_income' => 5,
@@ -55,21 +58,21 @@ function can_access_page($page) {
         'sales_report' => 5,
         'categories' => 5,
         'suppliers' => 5,
-        'products' => 3,  // Changed from 5 to 3 to allow Staff and Worker access
+        'products' => 3,
         'sales' => 5,
         'animals' => 5,
         'add_animal' => 5,
         'staff' => 5,
         'settings' => 5,
-        'feed' => 5,
-        'add_feed' => 5,
-        'activity_log' => 5,
+        'feed' => 3,
+        'add_feed' => 3,
+        'activity_log' => 5
     ];
 
     $required_level = $page_access[$page] ?? 1;
     
     // Explicitly restrict finance and inventory for Staff (Level 3) and below
-    if ($role_level <= 3 && in_array($page, ['finance', 'inventory', 'add_income', 'add_expense', 'add_equipment', 'reports', 'sales_report', 'categories', 'suppliers', 'products', 'sales'])) {
+    if ($role_level <= 3 && in_array($page, ['finance', 'inventory', 'add_income', 'add_expense', 'add_equipment', 'reports', 'sales_report', 'categories', 'suppliers', 'sales'])) {
         return false;
     }
 
