@@ -12,8 +12,8 @@ $staff_hash = password_hash('staff123', PASSWORD_DEFAULT);
 $conn->query("INSERT IGNORE INTO users (username, password, full_name, role_id) VALUES ('staff', '$staff_hash', 'John Staff', 4)");
 
 // Create worker user
-$worker_hash = password_hash('worker123', PASSWORD_DEFAULT);
-$conn->query("INSERT IGNORE INTO users (username, password, full_name, role_id) VALUES ('worker', '$worker_hash', 'Mike Worker', 3)");
+$worker_hash = password_hash('admin123', PASSWORD_DEFAULT);
+$conn->query("INSERT IGNORE INTO users (username, password, full_name, role_id) VALUES ('worker', '$worker_hash', 'Farm Worker', 3)");
 
 echo "Users created!";
 $conn->close();
