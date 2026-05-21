@@ -12,11 +12,13 @@ if (empty($page)) {
     require_once "includes/auth.php";
     if (is_logged_in()) {
         $role_level = get_role_level();
-    }
-    if ($role_level == 2) {
-        redirect('worker_dashboard');
-    } elseif ($role_level == 4) {
-        redirect('manager_dashboard');
+        if ($role_level == 2) {
+            redirect('worker_dashboard');
+        } elseif ($role_level == 4) {
+            redirect('manager_dashboard');
+        } else {
+            redirect('dashboard');
+        }
     } else {
         redirect('login');
     }

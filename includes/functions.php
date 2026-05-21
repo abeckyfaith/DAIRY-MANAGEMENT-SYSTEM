@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Generic functions for the application
 require_once __DIR__ . '/database.php';
 

@@ -10,7 +10,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS health_checks (
     temperature DECIMAL(4,1),
     heart_rate INT,
     respiratory_rate INT,
-    condition_score VARCHAR(20),
+    condition_score INT,
     notes TEXT,
     recorded_by INT,
     recording_date DATE NOT NULL,

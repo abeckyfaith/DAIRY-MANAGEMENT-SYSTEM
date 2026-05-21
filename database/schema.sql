@@ -1,4 +1,4 @@
-﻿-- Dairy Management System Database Schema
+-- Dairy Management System Database Schema
 
 -- Users and Roles
 CREATE TABLE roles (
@@ -268,6 +268,33 @@ CREATE TABLE stock_alerts (
     alert_date DATE NOT NULL,
     is_resolved TINYINT(1) DEFAULT 0,
     FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- Health Checks
+CREATE TABLE IF NOT EXISTS health_checks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    animal_id INT NOT NULL,
+    temperature DECIMAL(4,1),
+    heart_rate INT,
+    respiratory_rate INT,
+    condition_score INT,
+    notes TEXT,
+    recorded_by INT,
+    recording_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (animal_id) REFERENCES animals(id),
+    FOREIGN KEY (recorded_by) REFERENCES users(id)
+);
+
+-- Shop Sales
+CREATE TABLE IF NOT EXISTS shop_sales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    quantity DECIMAL(10,2) NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    total_sales DECIMAL(10,2) NOT NULL,
+    sale_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
