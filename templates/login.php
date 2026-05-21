@@ -67,9 +67,7 @@
                 <div class="d-flex justify-content-between">
                     <span>Staff:</span> <span>staff / staff123</span>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <span>Worker:</span> <span>worker / admin123</span>
-                </div>
+
             </div>
         </div>
     </div>
