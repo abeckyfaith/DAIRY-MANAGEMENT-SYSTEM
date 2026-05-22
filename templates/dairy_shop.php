@@ -1,11 +1,13 @@
 <?php
-$title = "Dairy Shop";
-$page = "dairy_shop";
-require_once __DIR__ . "/partials/header.php";
+require_once 'config/config.php';
+require_once 'includes/functions.php';
+require_once 'includes/auth.php';
+require_once 'includes/rbac.php';
 
+require_login();
 $pdo = get_pdo_connection();
 
-// Handle sale submission
+// Handle sale submission BEFORE header output
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['record_sale'])) {
     $product_id = (int)$_POST['product_id'];
     $quantity = (float)$_POST['quantity'];
@@ -13,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['record_sale'])) {
     $total_price = $quantity * $price_per_unit;
     
     try {
-        // Check if shop_sales table exists, if not create it
         $pdo->exec("CREATE TABLE IF NOT EXISTS shop_sales (
             id INT AUTO_INCREMENT PRIMARY KEY,
             product_id INT NOT NULL,
@@ -36,6 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['record_sale'])) {
     
     redirect('dairy_shop');
 }
+
+$title = "Dairy Shop";
+$page = "dairy_shop";
+require_once __DIR__ . "/partials/header.php";
 
 // Get products for sale
 $products = $pdo->query("SELECT * FROM products ORDER BY product_name")->fetchAll();

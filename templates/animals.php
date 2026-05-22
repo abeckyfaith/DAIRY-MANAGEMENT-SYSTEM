@@ -6,26 +6,19 @@ require_once 'includes/rbac.php';
 
 require_login();
 
-// BLOCK NON-ADMIN - Only Admin can access
-if (get_role_level() < 5) {
+// BLOCK NON-STAFF - Staff level 3+ can access
+if (get_role_level() < 3) {
     $_SESSION['error'] = "You don't have permission to access this page.";
     header("Location: index.php?page=dashboard");
     exit;
 }
 
-$title = "Animals";
-$page = "animals";
-require_once __DIR__ . "/partials/header.php";
-
 $conn = get_db_connection();
-$role = get_user_role();
-$role_class = 'admin';
-
-$breeds = $conn->query("SELECT * FROM breeds ORDER BY name");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_animal'])) {
     $tag_number = sanitize_input($_POST['tag_number']);
     $breed_id = intval($_POST['breed_id']);
+    if ($breed_id <= 0) $breed_id = null;
     $birth_date = sanitize_input($_POST['birth_date']);
     $gender = sanitize_input($_POST['gender']);
     $weight = floatval($_POST['weight']);
@@ -51,6 +44,13 @@ if (isset($_GET['delete'])) {
     exit;
 }
 
+$title = "Animals";
+$page = "animals";
+require_once __DIR__ . "/partials/header.php";
+
+$role = get_user_role();
+$role_class = 'admin';
+$breeds = $conn->query("SELECT * FROM breeds ORDER BY name");
 $animals = $conn->query("SELECT a.*, b.name as breed_name FROM animals a LEFT JOIN breeds b ON a.breed_id = b.id ORDER BY a.id DESC");
 $conn->close();
 ?>
@@ -115,7 +115,7 @@ $conn->close();
 </div>
 
 <!-- Add Animal Modal -->
-<div class="modal fade" id="addAnimalModal" tabindex="-1">
+<div class="modal fade" id="addAnimalModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -126,7 +126,7 @@ $conn->close();
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Tag Number *</label>
-                        <input type="text" name="tag_number" class="form-control" required>
+                        <input type="text" name="tag_number" class="form-control" required autofocus>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Breed</label>

@@ -5,8 +5,8 @@ $title = 'Profile';
 $page = 'profile';
 $role_class = 'manager';
 
-if (get_role_level() < 4) {
-    $_SESSION['error'] = "Access denied. Manager+ only.";
+if (get_role_level() < 2) {
+    $_SESSION['error'] = "Access denied.";
     header("Location: index.php?page=dashboard");
     exit;
 }

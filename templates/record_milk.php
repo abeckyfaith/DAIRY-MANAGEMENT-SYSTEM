@@ -1,3 +1,38 @@
+<?php
+require_once 'config/config.php';
+require_once 'includes/functions.php';
+require_once 'includes/auth.php';
+
+require_login();
+$user = get_current_user_info();
+$conn = get_db_connection();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $animal_id = intval($_POST['animal_id']);
+    $session = $_POST['session'];
+    $amount_liters = floatval($_POST['amount_liters']);
+    $fat_percentage = floatval($_POST['fat_percentage'] ?? null);
+    $protein_percentage = floatval($_POST['protein_percentage'] ?? null);
+    $somatic_cell_count = intval($_POST['somatic_cell_count'] ?? null);
+    $recording_date = $_POST['recording_date'] ?: date('Y-m-d');
+    
+    $stmt = $conn->prepare("INSERT INTO milk_production (animal_id, session, amount_liters, fat_percentage, protein_percentage, somatic_cell_count, recording_date, recorded_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isdddiii", $animal_id, $session, $amount_liters, $fat_percentage, $protein_percentage, $somatic_cell_count, $recording_date, $_SESSION['user_id']);
+    
+    if ($stmt->execute()) {
+        log_activity("Recorded milk: $amount_liters L ($session)");
+        $_SESSION['success'] = "Milk production recorded successfully!";
+        redirect('milk_production');
+    } else {
+        $_SESSION['error'] = "Failed to record milk production.";
+    }
+    
+    $stmt->close();
+}
+
+$animals = $conn->query("SELECT id, tag_number FROM animals WHERE status = 'Active' ORDER BY tag_number");
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,41 +49,6 @@
     </style>
 </head>
 <body>
-    <?php
-    require_once 'config/config.php';
-    require_once 'includes/functions.php';
-    require_once 'includes/auth.php';
-    
-    require_login();
-    $user = get_current_user_info();
-    $conn = get_db_connection();
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $animal_id = intval($_POST['animal_id']);
-        $session = $_POST['session'];
-        $amount_liters = floatval($_POST['amount_liters']);
-        $fat_percentage = floatval($_POST['fat_percentage'] ?? null);
-        $protein_percentage = floatval($_POST['protein_percentage'] ?? null);
-        $somatic_cell_count = intval($_POST['somatic_cell_count'] ?? null);
-        $recording_date = $_POST['recording_date'] ?: date('Y-m-d');
-        
-        $stmt = $conn->prepare("INSERT INTO milk_production (animal_id, session, amount_liters, fat_percentage, protein_percentage, somatic_cell_count, recording_date, recorded_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isdddiii", $animal_id, $session, $amount_liters, $fat_percentage, $protein_percentage, $somatic_cell_count, $recording_date, $_SESSION['user_id']);
-        
-        if ($stmt->execute()) {
-            log_activity("Recorded milk: $amount_liters L ($session)");
-            $_SESSION['success'] = "Milk production recorded successfully!";
-            redirect('milk_production');
-        } else {
-            $_SESSION['error'] = "Failed to record milk production.";
-        }
-        
-        $stmt->close();
-    }
-    
-    $animals = $conn->query("SELECT id, tag_number FROM animals WHERE status = 'Active' ORDER BY tag_number");
-    $conn->close();
-    ?>
     
     <div class="container-fluid">
         <div class="row">

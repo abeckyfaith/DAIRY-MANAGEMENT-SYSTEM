@@ -1,3 +1,37 @@
+<?php
+require_once 'config/config.php';
+require_once 'includes/functions.php';
+require_once 'includes/auth.php';
+
+require_login();
+$user = get_current_user_info();
+$conn = get_db_connection();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $animal_id = intval($_POST['animal_id']);
+    $treatment_date = $_POST['treatment_date'];
+    $diagnosis = sanitize_input($_POST['diagnosis']);
+    $medication = sanitize_input($_POST['medication']);
+    $dosage = sanitize_input($_POST['dosage']);
+    $withdrawal_period_days = intval($_POST['withdrawal_period_days'] ?? null);
+    
+    $stmt = $conn->prepare("INSERT INTO treatments (animal_id, treatment_date, diagnosis, medication, dosage, withdrawal_period_days) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("issssi", $animal_id, $treatment_date, $diagnosis, $medication, $dosage, $withdrawal_period_days);
+    
+    if ($stmt->execute()) {
+        log_activity("Recorded health check for animal ID: $animal_id");
+        $_SESSION['success'] = "Health check recorded successfully!";
+        redirect('health');
+    } else {
+        $_SESSION['error'] = "Failed to record health check.";
+    }
+    
+    $stmt->close();
+}
+
+$animals = $conn->query("SELECT id, tag_number FROM animals WHERE status = 'Active' ORDER BY tag_number");
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,40 +48,6 @@
     </style>
 </head>
 <body>
-    <?php
-    require_once 'config/config.php';
-    require_once 'includes/functions.php';
-    require_once 'includes/auth.php';
-    
-    require_login();
-    $user = get_current_user_info();
-    $conn = get_db_connection();
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $animal_id = intval($_POST['animal_id']);
-        $treatment_date = $_POST['treatment_date'];
-        $diagnosis = sanitize_input($_POST['diagnosis']);
-        $medication = sanitize_input($_POST['medication']);
-        $dosage = sanitize_input($_POST['dosage']);
-        $withdrawal_period_days = intval($_POST['withdrawal_period_days'] ?? null);
-        
-        $stmt = $conn->prepare("INSERT INTO treatments (animal_id, treatment_date, diagnosis, medication, dosage, withdrawal_period_days) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issssi", $animal_id, $treatment_date, $diagnosis, $medication, $dosage, $withdrawal_period_days);
-        
-        if ($stmt->execute()) {
-            log_activity("Recorded health check for animal ID: $animal_id");
-            $_SESSION['success'] = "Health check recorded successfully!";
-            redirect('health');
-        } else {
-            $_SESSION['error'] = "Failed to record health check.";
-        }
-        
-        $stmt->close();
-    }
-    
-    $animals = $conn->query("SELECT id, tag_number FROM animals WHERE status = 'Active' ORDER BY tag_number");
-    $conn->close();
-    ?>
     
     <div class="container-fluid">
         <div class="row">

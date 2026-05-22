@@ -5,8 +5,8 @@ $title = 'Health Management';
 $page = 'health';
 $role_class = 'manager';
 
-if (get_role_level() < 3) {
-    $_SESSION['error'] = "Access denied. Staff+ only.";
+if (get_role_level() < 2) {
+    $_SESSION['error'] = "Access denied.";
     header("Location: index.php?page=dashboard");
     exit;
 }
@@ -197,7 +197,7 @@ $conn->close();
     </div>
 </div>
 
-<div class="modal fade" id="recordHealthModal" tabindex="-1">
+<div class="modal fade" id="recordHealthModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

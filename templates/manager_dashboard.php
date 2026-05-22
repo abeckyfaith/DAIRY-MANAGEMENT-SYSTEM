@@ -1,16 +1,18 @@
 <?php
-$title = "Manager Dashboard";
 require_once "includes/auth.php";
 require_once "includes/rbac.php";
+require_once "includes/database.php";
+
+// Require manager or higher access (must be BEFORE header to allow redirect)
+require_role('manager');
+
+$title = "Manager Dashboard";
 require_once "templates/partials/header.php";
 
 $pdo = get_pdo_connection();
 $role_level = get_role_level();
 $user = get_current_user_info();
 $role = get_user_role();
-
-// Require manager or higher access
-require_role('manager');
 ?>
 <div class="welcome-banner manager fade-in">
     <div>

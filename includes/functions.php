@@ -24,6 +24,6 @@ function format_date($date) {
 
 // Sanitize user input
 function sanitize_input($data) {
-    return htmlspecialchars(stripslashes(trim($data)));
+    return htmlspecialchars(trim($data));
 }
 ?>

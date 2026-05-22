@@ -10,12 +10,12 @@ if (file_exists(__DIR__ . "/../.env")) {
 }
 
 // Fallback to defaults if not defined
-if (!defined("DB_HOST")) define("DB_HOST", "localhost");
-if (!defined("DB_USER")) define("DB_USER", "root");
-if (!defined("DB_PASS")) define("DB_PASS", "");
-if (!defined("DB_NAME")) define("DB_NAME", "dairy_management");
+if (!defined("DB_HOST")) define("DB_HOST", "sql204.infinityfree.com");
+if (!defined("DB_USER")) define("DB_USER", "if0_41974988");
+if (!defined("DB_PASS")) define("DB_PASS", "akech2000");
+if (!defined("DB_NAME")) define("DB_NAME", "if0_41974988_dairy");
 if (!defined("APP_NAME")) define("APP_NAME", "Dairy Management System");
-if (!defined("BASE_URL")) define("BASE_URL", "http://localhost/dairy_management/");
+if (!defined("BASE_URL")) define("BASE_URL", "http://if0-41974988.infinityfreeapp.com/");
 if (!defined("CURRENCY")) define("CURRENCY", "UG Shillings ");
 
 // Error reporting

@@ -1,3 +1,34 @@
+<?php
+require_once 'config/config.php';
+require_once 'includes/functions.php';
+require_once 'includes/auth.php';
+
+require_login();
+$user = get_current_user_info();
+$conn = get_db_connection();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $feed_name = sanitize_input($_POST['feed_name']);
+    $quantity_kg = floatval($_POST['quantity_kg']);
+    $unit_cost = floatval($_POST['unit_cost'] ?? 0);
+    $supplier = sanitize_input($_POST['supplier'] ?? '');
+    
+    $stmt = $conn->prepare("INSERT INTO feed_inventory (feed_name, quantity_kg, unit_cost, supplier) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sddds", $feed_name, $quantity_kg, $unit_cost, $supplier);
+    
+    if ($stmt->execute()) {
+        log_activity("Added feed: $feed_name ($quantity_kg kg)");
+        $_SESSION['success'] = "Feed added successfully!";
+        redirect('feed');
+    } else {
+        $_SESSION['error'] = "Failed to add feed.";
+    }
+    
+    $stmt->close();
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,37 +45,6 @@
     </style>
 </head>
 <body>
-    <?php
-    require_once 'config/config.php';
-    require_once 'includes/functions.php';
-    require_once 'includes/auth.php';
-    
-    require_login();
-    $user = get_current_user_info();
-    $conn = get_db_connection();
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $feed_name = sanitize_input($_POST['feed_name']);
-        $quantity_kg = floatval($_POST['quantity_kg']);
-        $unit_cost = floatval($_POST['unit_cost'] ?? 0);
-        $supplier = sanitize_input($_POST['supplier'] ?? '');
-        
-        $stmt = $conn->prepare("INSERT INTO feed_inventory (feed_name, quantity_kg, unit_cost, supplier) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sddds", $feed_name, $quantity_kg, $unit_cost, $supplier);
-        
-        if ($stmt->execute()) {
-            log_activity("Added feed: $feed_name ($quantity_kg kg)");
-            $_SESSION['success'] = "Feed added successfully!";
-            redirect('feed');
-        } else {
-            $_SESSION['error'] = "Failed to add feed.";
-        }
-        
-        $stmt->close();
-    }
-    
-    $conn->close();
-    ?>
     
     <div class="container-fluid">
         <div class="row">

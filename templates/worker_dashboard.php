@@ -1,18 +1,19 @@
 <?php
-$title = "Worker Dashboard";
 require_once "includes/auth.php";
 require_once "includes/rbac.php";
-require_once "templates/partials/header.php";
+require_once "includes/functions.php";
 
-$pdo = get_pdo_connection();
 $role_level = get_role_level();
-$user = get_current_user_info();
-$role = get_user_role();
-
-// Require worker or higher access
 if ($role_level < 2) {
     redirect('login');
 }
+
+$title = "Worker Dashboard";
+require_once "templates/partials/header.php";
+
+$pdo = get_pdo_connection();
+$user = get_current_user_info();
+$role = get_user_role();
 ?>
 <div class="welcome-banner worker fade-in">
     <div>

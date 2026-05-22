@@ -21,17 +21,26 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // IMMEDIATE CLEANUP — runs as soon as this script is parsed, before DOMContentLoaded
+        (function() {
+            var bd = document.querySelectorAll('.modal-backdrop');
+            for (var i = 0; i < bd.length; i++) bd[i].remove();
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        })();
+
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
             if (!sidebar) return;
             sidebar.classList.toggle('open');
             if (overlay) overlay.classList.toggle('show');
         }
 
         function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
             if (sidebar) sidebar.classList.remove('open');
             if (overlay) overlay.classList.remove('show');
         }
@@ -81,7 +90,6 @@
                 closeHoverSidebar();
             });
 
-            // Close sidebar when clicking outside on desktop
             document.addEventListener('click', function(e) {
                 if (!isDesktop()) return;
                 if (!sidebar.contains(e.target) && !e.target.closest('.menu-toggle')) {
@@ -92,7 +100,7 @@
 
         // Scroll to top
         window.onscroll = function() {
-            const btn = document.getElementById('scrollTop');
+            var btn = document.getElementById('scrollTop');
             if (btn) {
                 if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                     btn.classList.add('show');
@@ -106,13 +114,45 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize tooltips and popovers if any
+        // Full cleanup on DOMContentLoaded
         document.addEventListener('DOMContentLoaded', function() {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
+            // Remove any stuck backdrop
+            var bd = document.querySelectorAll('.modal-backdrop');
+            for (var i = 0; i < bd.length; i++) bd[i].remove();
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+
+            // Clean up tooltips
+            var tips = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tips.forEach(function(el) { new bootstrap.Tooltip(el); });
+
+            // Auto-clean backdrop when any modal is hidden
+            var modals = document.querySelectorAll('.modal');
+            for (var i = 0; i < modals.length; i++) {
+                modals[i].addEventListener('hidden.bs.modal', function() {
+                    var leftovers = document.querySelectorAll('.modal-backdrop');
+                    for (var j = 0; j < leftovers.length; j++) leftovers[j].remove();
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                });
+            }
         });
+
+        // Periodic safety net — every 2s remove orphan backdrops
+        setInterval(function() {
+            var showModals = document.querySelectorAll('.modal.show');
+            if (showModals.length === 0) {
+                var orphans = document.querySelectorAll('.modal-backdrop');
+                if (orphans.length > 0) {
+                    for (var i = 0; i < orphans.length; i++) orphans[i].remove();
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                }
+            }
+        }, 2000);
     </script>
 </body>
 </html>

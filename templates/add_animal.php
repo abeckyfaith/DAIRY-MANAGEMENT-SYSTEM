@@ -1,3 +1,42 @@
+<?php
+require_once 'config/config.php';
+require_once 'includes/functions.php';
+require_once 'includes/auth.php';
+
+require_login();
+$user = get_current_user_info();
+$conn = get_db_connection();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $animal_type = sanitize_input($_POST['animal_type']);
+    $breed_id = intval($_POST['breed_id']);
+    $birth_date = $_POST['birth_date'] ?: null;
+    $gender = $_POST['gender'];
+    $weight = floatval($_POST['weight'] ?? 0);
+    $notes = sanitize_input($_POST['notes'] ?? '');
+    
+    $prefix = strtoupper(substr($animal_type, 0, 2));
+    $result = $conn->query("SELECT COUNT(*) as count FROM animals WHERE animal_type = '$animal_type'");
+    $count = $result->fetch_assoc()['count'] + 1;
+    $tag_number = $prefix . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+    
+    $stmt = $conn->prepare("INSERT INTO animals (tag_number, animal_type, breed_id, birth_date, gender, weight, status, notes) VALUES (?, ?, ?, ?, ?, ?, 'Active', ?)");
+    $stmt->bind_param("ssissds", $tag_number, $animal_type, $breed_id, $birth_date, $gender, $weight, $notes);
+    
+    if ($stmt->execute()) {
+        log_activity("Added new animal: $tag_number");
+        $_SESSION['success'] = "Animal added successfully!";
+        redirect('animals');
+    } else {
+        $_SESSION['error'] = "Failed to add animal. Tag number may already exist.";
+    }
+    
+    $stmt->close();
+}
+
+$breeds = $conn->query("SELECT * FROM breeds ORDER BY name");
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,46 +53,6 @@
     </style>
 </head>
 <body>
-    <?php
-    require_once 'config/config.php';
-    require_once 'includes/functions.php';
-    require_once 'includes/auth.php';
-    
-    require_login();
-    $user = get_current_user_info();
-    $conn = get_db_connection();
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $animal_type = sanitize_input($_POST['animal_type']);
-        $breed_id = intval($_POST['breed_id']);
-        $birth_date = $_POST['birth_date'] ?: null;
-        $gender = $_POST['gender'];
-        $weight = floatval($_POST['weight'] ?? 0);
-        $notes = sanitize_input($_POST['notes'] ?? '');
-        
-        // Generate tag number based on animal type
-        $prefix = strtoupper(substr($animal_type, 0, 2));
-        $result = $conn->query("SELECT COUNT(*) as count FROM animals WHERE animal_type = '$animal_type'");
-        $count = $result->fetch_assoc()['count'] + 1;
-        $tag_number = $prefix . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
-        
-        $stmt = $conn->prepare("INSERT INTO animals (tag_number, animal_type, breed_id, birth_date, gender, weight, status, notes) VALUES (?, ?, ?, ?, ?, ?, 'Active', ?)");
-        $stmt->bind_param("ssissds", $tag_number, $animal_type, $breed_id, $birth_date, $gender, $weight, $notes);
-        
-        if ($stmt->execute()) {
-            log_activity("Added new animal: $tag_number");
-            $_SESSION['success'] = "Animal added successfully!";
-            redirect('animals');
-        } else {
-            $_SESSION['error'] = "Failed to add animal. Tag number may already exist.";
-        }
-        
-        $stmt->close();
-    }
-    
-    $breeds = $conn->query("SELECT * FROM breeds ORDER BY name");
-    $conn->close();
-    ?>
     
     <div class="container-fluid">
         <div class="row">

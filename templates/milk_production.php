@@ -5,8 +5,8 @@ $title = 'Milk Production';
 $page = 'milk_production';
 $role_class = 'manager';
 
-if (get_role_level() < 3) {
-    $_SESSION['error'] = "Access denied. Staff+ only.";
+if (get_role_level() < 2) {
+    $_SESSION['error'] = "Access denied.";
     header("Location: index.php?page=dashboard");
     exit;
 }
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $session = ($hour < 12) ? 'Morning' : 'Evening';
         
         $stmt = $conn->prepare("INSERT INTO milk_production (animal_id, session, amount_liters, fat_percentage, protein_percentage, somatic_cell_count, recording_date, recorded_by, recorded_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isdddisiss", $animal_id, $session, $amount_liters, $fat_percentage, $protein_percentage, $somatic_cell_count, $recording_date, $_SESSION['user_id'], $recorded_at);
+        $stmt->bind_param("isdddisis", $animal_id, $session, $amount_liters, $fat_percentage, $protein_percentage, $somatic_cell_count, $recording_date, $_SESSION['user_id'], $recorded_at);
         
         if ($stmt->execute()) {
             log_activity($_SESSION['user_id'], "Recorded milk production for animal ID: $animal_id");
@@ -195,7 +195,7 @@ $conn->close();
     </div>
 </div>
 
-<div class="modal fade" id="recordMilkModal" tabindex="-1">
+<div class="modal fade" id="recordMilkModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -225,13 +225,12 @@ $conn->close();
                     </div>
                     <div class="mb-3">
                         <label for="amount_liters" class="form-label">Amount (Liters)</label>
-                        <input type="number" step="0.01" class="form-control" id="amount_liters" name="amount_liters" min="0" required>
+                        <input type="number" step="0.01" class="form-control" id="amount_liters" name="amount_liters" min="0" required autofocus>
                     </div>
                     <div class="alert alert-info mb-3">
                         <i class="fas fa-info-circle"></i>
                         <strong>Auto-recorded:</strong> Recording Date (Today), Fat % (3.5), Protein % (3.2), Somatic Cells (200)
                     </div>
-                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

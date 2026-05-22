@@ -11,8 +11,6 @@ if (get_role_level() < 4) {
     exit;
 }
 
-require_once __DIR__ . "/partials/header.php";
-
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -36,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
+require_once __DIR__ . "/partials/header.php";
 
 $report_params = $_SESSION['report_params'] ?? [
     'type' => 'daily',

@@ -5,8 +5,8 @@ $title = 'Feed Inventory';
 $page = 'feed';
 $role_class = 'admin';
 
-if (get_role_level() < 5) {
-    $_SESSION['error'] = "Access denied. Admin only.";
+if (get_role_level() < 3) {
+    $_SESSION['error'] = "Access denied.";
     header("Location: index.php?page=dashboard");
     exit;
 }
