@@ -590,11 +590,29 @@ body {
     }
 }
 
+/* Modal mobile responsiveness */
+.modal-dialog {
+    max-height: 90vh;
+}
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
     }
     .sidebar.open {
         transform: translateX(0);
+    }
+    
+    .modal-dialog {
+        margin: 0.5rem;
+        max-height: 85vh;
+    }
+    .modal-body {
+        max-height: 50vh;
+        overflow-y: auto;
     }
 }
